@@ -1,212 +1,332 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#10234d">
-<meta name="description" content="Plataforma gratuita de preparação para concursos públicos de nível médio. Aulas simples, questões comentadas, revisão e simulados.">
- <!-- Atualizacao do Concurso sem Complicacao -->
-<title>Concurso sem Complicação | Estude para passar</title>
+<meta name="theme-color" content="#101827">
+<title>Concurso sem Complicação | Preparação Premium</title>
 <style>
-:root{--navy:#10234d;--blue:#2459d3;--blue2:#1746b5;--bg:#f4f7fc;--ink:#17233b;--muted:#65738a;--line:#dfe6f1;--green:#167647;--red:#b42318;--gold:#956400;--white:#fff}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-header{background:linear-gradient(125deg,#10234d,#2459d3);color:white;padding:22px 18px 30px}.wrap{max-width:1180px;margin:auto;padding:0 16px}
-.top{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}.logo{font-weight:950;font-size:1.16rem;letter-spacing:.2px}.logo span{color:#c6d8ff}.stats{display:flex;gap:8px;flex-wrap:wrap}.stat{padding:7px 11px;border:1px solid #ffffff40;background:#ffffff16;border-radius:12px;font-size:.86rem}
-.hero{padding:28px 0 4px}.hero h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.04;max-width:850px;margin:0 0 12px;letter-spacing:-1px}.hero p{color:#dbe7ff;max-width:780px;margin:0}
-main{padding:22px 0 48px}.notice{background:#fff8e6;border:1px solid #f1d48a;color:#684b00;border-radius:13px;padding:12px 15px;margin-bottom:16px;font-size:.9rem}
-.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 5px 18px #10234d08}.dashboard{display:grid;grid-template-columns:285px minmax(0,1fr);gap:18px;align-items:start}.side{display:grid;gap:13px}.nav{display:grid;gap:7px;margin-top:10px}.nav button{border:1px solid var(--line);background:white;color:var(--ink);border-radius:11px;padding:10px 12px;text-align:left;font:inherit;cursor:pointer}.nav button.active,.nav button:hover{background:#edf3ff;border-color:#9bb8f5;color:#153d9c}.nav small{display:block;color:var(--muted);font-size:.76rem}
-.eyebrow{text-transform:uppercase;letter-spacing:.09em;color:var(--blue);font-size:.73rem;font-weight:900}h2{font-size:1.65rem;line-height:1.2;margin:5px 0 8px}h3{font-size:1.06rem;margin:18px 0 7px}.lead{font-size:1.02rem;color:#3d4b63}.muted{color:var(--muted)}.small{font-size:.84rem}.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.pill{display:inline-block;background:#eaf1ff;color:#1e4bb0;border-radius:99px;padding:4px 9px;font-size:.75rem;font-weight:850}
-.bar{height:9px;background:#e7edf6;border-radius:99px;overflow:hidden;margin:9px 0}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#2459d3,#18a66a);transition:width .25s}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.kpi{background:#f5f8fd;border-radius:12px;padding:10px}.kpi b{display:block;font-size:1.3rem}.kpi span{font-size:.76rem;color:var(--muted)}
-.callout{background:#eff5ff;border-left:4px solid var(--blue);border-radius:10px;padding:12px 14px;margin:12px 0}.example{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:13px;margin:12px 0}.example b{color:#1d4ed8}
-.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:850;font-size:.9rem;cursor:pointer}.primary{background:var(--blue);color:white}.primary:hover{background:var(--blue2)}.secondary{background:#e8edf5;color:#26344d}.outline{background:white;border:1px solid #cbd5e1;color:#26344d}.danger{background:#fff1f0;color:#9c211b}.btn:disabled{opacity:.45;cursor:not-allowed}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.subject{border:1px solid var(--line);border-radius:13px;padding:13px;background:#fff;cursor:pointer}.subject:hover{border-color:#91b1f3;background:#f8faff}.subject strong{display:block}.subject small{color:var(--muted)}.mini{height:6px;background:#e7edf6;border-radius:99px;margin-top:8px;overflow:hidden}.mini i{display:block;height:100%;background:#2459d3}
-.option{width:100%;display:block;text-align:left;background:#fff;border:1px solid #cbd5e1;border-radius:10px;padding:11px 12px;margin:7px 0;font:inherit;cursor:pointer}.option:hover{background:#f2f6ff;border-color:#91b1f3}.option.good{background:#effaf3;border-color:#7ac99a}.option.bad{background:#fff1f0;border-color:#f0a29c}.option:disabled{opacity:1;cursor:default}.feedback{border-radius:10px;padding:11px;margin-top:9px}.feedback.good{background:#effaf3;color:#155c35}.feedback.bad{background:#fff1f0;color:#8c211b}
-input,select{font:inherit;padding:9px 11px;border:1px solid #cbd5e1;border-radius:9px;max-width:100%}.checklist label{display:flex;gap:8px;align-items:center;padding:7px 0;border-bottom:1px solid #edf0f5}.checklist input{width:17px;height:17px}.hide{display:none!important}
-.resource{display:inline-block;margin:5px 7px 4px 0;color:#1746b5;text-decoration:none;font-weight:700}.resource:hover{text-decoration:underline}
-table{border-collapse:collapse;width:100%;font-size:.9rem}td,th{padding:9px;border-bottom:1px solid var(--line);text-align:left}th{background:#f5f8fd}
-footer{text-align:center;color:var(--muted);font-size:.82rem;padding:0 16px 28px}
-@media(max-width:850px){.dashboard{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.cards{grid-template-columns:1fr}.hero{padding-top:22px}.panel{padding:15px}}
+:root{--bg:#101827;--panel:#192538;--panel2:#223249;--text:#f4f7fb;--muted:#aab8ca;--gold:#f2bd55;--green:#38c98b;--red:#ff7777;--blue:#65a9ff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
+header{padding:24px 5%;background:#0b1220;border-bottom:1px solid #34445b;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+header h1{font-size:22px;margin:0;color:var(--gold)}
+header p{margin:5px 0 0;color:var(--muted);font-size:13px}
+nav{display:flex;gap:8px;flex-wrap:wrap;padding:15px 5%;background:#121e30;position:sticky;top:0;z-index:5}
+button,select{cursor:pointer;border:0;border-radius:9px;padding:11px 14px;font-weight:bold}
+nav button{background:var(--panel2);color:white}
+nav button.active,button.primary{background:var(--gold);color:#172033}
+button.secondary{background:#344760;color:white}
+button:disabled{opacity:.4;cursor:not-allowed}
+main{max-width:1150px;margin:auto;padding:25px 5% 60px}
+section{display:none}
+section.active{display:block}
+h2{margin-top:0}
+h3{color:var(--gold)}
+p{line-height:1.6}
+.muted{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid #34445b;border-radius:14px;padding:18px;margin-bottom:15px}
+.stat{font-size:28px;font-weight:bold;color:var(--gold);margin:8px 0}
+.progress{height:10px;background:#34445b;border-radius:20px;overflow:hidden}
+.progress span{display:block;height:100%;background:var(--green);width:0}
+.subject{display:flex;flex-direction:column;gap:10px}
+.subject button{width:100%;text-align:left;background:var(--panel2);color:white}
+.subject button:hover{border:1px solid var(--gold)}
+.question{font-size:18px;line-height:1.5}
+.option{display:block;width:100%;text-align:left;margin:9px 0;background:#293b53;color:white;border:1px solid #41536b}
+.option:hover{border-color:var(--gold)}
+.option.correct{background:#145d45;border-color:var(--green)}
+.option.wrong{background:#652f38;border-color:var(--red)}
+.feedback{padding:15px;border-radius:10px;margin-top:15px;line-height:1.6}
+.feedback.good{background:#145d45}
+.feedback.bad{background:#652f38}
+.tag{display:inline-block;background:#344760;padding:5px 9px;border-radius:20px;font-size:12px;margin:3px}
+input,select{background:#293b53;color:white;border:1px solid #526780;max-width:100%}
+input{padding:12px;border-radius:8px}
+footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid #34445b}
+.small{font-size:13px}
+.list-item{padding:12px 0;border-bottom:1px solid #34445b}
+@media(max-width:600px){header{align-items:flex-start}nav{position:static}nav button{flex:1}main{padding-top:18px}}
 </style>
 </head>
 <body>
-<header><div class="wrap">
- <div class="top"><div class="logo">🎯 CONCURSO <span>SEM COMPLICAÇÃO</span></div>
- <div class="stats"><div class="stat">⭐ <b id="points">0</b> pontos</div><div class="stat">✅ <b id="hits">0</b> acertos</div><div class="stat">📚 <b id="done">0</b>/7 matérias</div></div></div>
- <div class="hero"><h1>Seu próximo passo pode ser a aprovação.</h1><p>Uma escola gratuita para concursos de nível médio: explicações simples, exemplos, questões comentadas, revisão dos erros e simulados para treinar com estratégia.</p></div>
-</div></header>
-<main class="wrap">
- <div class="notice"><b>Importante:</b> não existe fórmula que garanta aprovação. Cada concurso tem edital, banca e pesos próprios. Use esta base para aprender e depois ajuste o estudo ao edital oficial do cargo desejado. As leis devem ser conferidas em sua versão vigente.</div>
- <section class="panel" style="margin-bottom:16px">
-  <div class="row"><div><b>📈 Sua preparação</b><div class="small muted">Seu progresso fica salvo neste navegador.</div></div><b id="pct">0%</b></div><div class="bar"><i id="progress"></i></div>
-  <div class="kpis"><div class="kpi"><b id="answered">0</b><span>questões certas</span></div><div class="kpi"><b id="accuracy">—</b><span>aproveitamento</span></div><div class="kpi"><b id="reviewCount">0</b><span>para revisar</span></div><div class="kpi"><b id="streak">0</b><span>dias de estudo*</span></div></div>
-  <div class="small muted">*Contagem simples de dias em que você marcou atividades neste navegador.</div>
- </section>
- <div class="dashboard">
-  <aside class="side">
-   <section class="panel"><b>🧭 Menu de estudos</b><div class="nav" id="nav"></div></section>
-   <section class="panel"><b>🗓️ Missão diária</b><p class="small muted">Uma rotina inicial de 50 minutos. Ajuste ao seu tempo.</p><div class="checklist" id="daily">
-    <label><input type="checkbox" data-task="lesson"> 20 min: aprender uma aula</label>
-    <label><input type="checkbox" data-task="questions"> 20 min: resolver questões</label>
-    <label><input type="checkbox" data-task="review"> 10 min: revisar erros</label>
-    <label><input type="checkbox" data-task="notice"> Conferir edital / avisos</label>
-   </div><p class="small muted" id="dailyMsg">Constância vale mais que estudar tudo em um único dia.</p></section>
-   <section class="panel"><b>🎯 Meu objetivo</b><p class="small muted">Escolha uma trilha para lembrar seu foco.</p><select id="target" style="width:100%"><option>Prefeitura / Câmara Municipal</option><option>Agente ou assistente administrativo</option><option>Área bancária</option><option>Instituto Federal / universidade</option><option>Outro concurso de nível médio</option></select><p class="small muted">A seleção é apenas organizacional. O edital define as matérias da sua prova.</p>
-    <div class="actions"><button class="btn outline" onclick="exportData()">Exportar progresso</button><button class="btn danger" onclick="resetData()">Zerar progresso</button></div></section>
-  </aside>
-  <section class="panel" id="main"></section>
+<header>
+ <div>
+  <h1>🎓 CONCURSO SEM COMPLICAÇÃO</h1>
+  <p>Preparação de qualidade, gratuita e acessível para todos.</p>
  </div>
+ <div><span class="tag">VERSÃO 4.0</span><span class="tag">NÍVEL MÉDIO</span></div>
+</header>
+
+<nav>
+ <button class="active" data-tab="inicio">Painel</button>
+ <button data-tab="materias">Disciplinas</button>
+ <button data-tab="simulado">Simulados</button>
+ <button data-tab="revisao">Revisão</button>
+ <button data-tab="plano">Plano de estudos</button>
+</nav>
+
+<main>
+<section id="inicio" class="active">
+ <h2>Seu painel de preparação</h2>
+ <p class="muted">Acompanhe seu desempenho e descubra onde precisa melhorar.</p>
+ <div class="grid">
+  <div class="card"><div class="muted">Pontos conquistados</div><div class="stat" id="points">0</div></div>
+  <div class="card"><div class="muted">Questões respondidas</div><div class="stat" id="answered">0</div></div>
+  <div class="card"><div class="muted">Acertos</div><div class="stat" id="hits">0</div></div>
+  <div class="card"><div class="muted">Aproveitamento</div><div class="stat" id="accuracy">0%</div></div>
+ </div>
+ <div class="card">
+  <h3>Minha evolução</h3>
+  <div class="progress"><span id="overallBar"></span></div>
+  <p id="overallText" class="muted small">Responda questões para acompanhar sua evolução.</p>
+ </div>
+ <div class="card">
+  <h3>🎯 Meta de hoje</h3>
+  <p>Responder pelo menos 10 questões e revisar os erros.</p>
+  <div class="progress"><span id="dailyBar"></span></div>
+  <p id="dailyText" class="muted small">0 de 10 questões respondidas hoje.</p>
+ </div>
+ <div class="card">
+  <h3>Seu próximo passo</h3>
+  <p id="recommendation">Comece escolhendo uma disciplina. Seu desempenho ajudará a indicar o que estudar.</p>
+  <button class="primary" onclick="showTab('materias')">Começar a estudar</button>
+ </div>
+</section>
+
+<section id="materias">
+ <h2>📚 Central de disciplinas</h2>
+ <p class="muted">Escolha uma matéria para estudar e praticar.</p>
+ <div class="grid" id="subjectList"></div>
+ <div id="lessonArea"></div>
+</section>
+
+<section id="simulado">
+ <h2>📝 Simulados</h2>
+ <div class="card">
+  <h3>Simulado geral</h3>
+  <p>Questões sorteadas do banco disponível, sem repetição dentro da mesma prova.</p>
+  <label for="simCount">Quantidade de questões:</label><br><br>
+  <select id="simCount">
+   <option value="10">10 questões</option>
+   <option value="20" selected>20 questões</option>
+   <option value="28">Todas as questões disponíveis</option>
+  </select>
+  <br><br>
+  <button class="primary" onclick="startExam()">Iniciar simulado</button>
+ </div>
+ <div id="examArea"></div>
+</section>
+
+<section id="revisao">
+ <h2>🔄 Central de revisão</h2>
+ <p class="muted">As questões que você errou ficam disponíveis para estudar novamente.</p>
+ <div id="reviewArea"></div>
+</section>
+
+<section id="plano">
+ <h2>📅 Meu plano de estudos</h2>
+ <div class="card">
+  <h3>Rotina semanal sugerida</h3>
+  <p>Adapte o plano ao tempo que você tem disponível.</p>
+  <div id="weeklyPlan"></div>
+ </div>
+ <div class="card">
+  <h3>Minha meta diária</h3>
+  <p>Marque as atividades concluídas. A lista fica salva neste navegador.</p>
+  <div id="dailyTasks"></div>
+ </div>
+ <div class="card">
+  <h3>Meu histórico</h3>
+  <p id="historyText">Nenhum simulado realizado ainda.</p>
+  <button class="secondary" onclick="exportProgress()">Exportar meu progresso</button>
+  <button class="secondary" onclick="resetProgress()">Reiniciar progresso</button>
+ </div>
+</section>
 </main>
-<footer>Concurso sem Complicação • Conteúdo educativo gratuito • Revise sempre o edital e as fontes oficiais.</footer>
+
+<footer>
+ <p>Concurso sem Complicação © 2026</p>
+ <p>Educação gratuita, acessível e de qualidade.</p>
+ <p class="small">Material didático de apoio. Consulte sempre o edital e a legislação atualizada do seu concurso.</p>
+</footer>
+
 <script>
-const subjects=[
-{id:"port",icon:"📝",name:"Língua Portuguesa",desc:"Interpretação, gramática e pontuação",lesson:"Português aparece em muitos concursos. Comece pela interpretação: identifique assunto, ideia principal e o que o texto realmente afirma. Depois avance para classes de palavras, concordância, regência, crase, pontuação, coesão e reescrita.",example:"Texto: “A prática constante melhora o desempenho do estudante.” A ideia principal é que praticar com frequência ajuda a melhorar o desempenho. Não conclua que a pessoa ficará perfeita ou que não precisará estudar outras matérias.",tip:"Na interpretação, não responda com sua opinião: volte ao texto e procure a evidência.",questions:[
-["Segundo a frase do exemplo, o que melhora o desempenho?",["A sorte","A prática constante","A idade","A compra de livros"],1,"A frase afirma que a prática constante melhora o desempenho."],
-["Na frase “Os candidatos chegaram cedo”, “cedo” indica:",["Lugar","Tempo","Dúvida","Negação"],1,"“Cedo” indica quando chegaram: circunstância de tempo."],
-["Assinale a frase com concordância adequada:",["Fazem dois anos que estudo.","Houveram muitos inscritos.","Existem boas oportunidades.","A gente estudamos muito."],2,"“Existem” concorda com o sujeito plural “boas oportunidades”. “Haver” no sentido de existir fica no singular."],
-["Em “Estudei, portanto fui bem”, “portanto” expressa:",["Conclusão","Oposição","Dúvida","Condição"],0,"“Portanto” é conjunção conclusiva."],
-["Qual palavra é um substantivo em “O candidato estudioso chegou”?",["O","candidato","estudioso","chegou"],1,"“Candidato” nomeia uma pessoa; é substantivo."],
-["A pontuação correta é:",["Vamos estudar pessoal!","Vamos estudar, pessoal!","Vamos, estudar pessoal!","Vamos estudar pessoal,"],1,"O vocativo “pessoal” deve ser isolado por vírgula."],
-["O antônimo de “provisório” é:",["Temporário","Definitivo","Passageiro","Breve"],1,"“Definitivo” tem sentido oposto a provisório."],
-["Em “Embora estivesse cansado, continuou”, “embora” indica:",["Causa","Concessão","Conclusão","Finalidade"],1,"“Embora” introduz ideia de concessão: algo ocorre apesar de uma circunstância."]]},
-{id:"mat",icon:"➗",name:"Matemática",desc:"Porcentagem, regra de três e operações",lesson:"A matemática de prova costuma cobrar leitura atenta e operações básicas. Domine frações, porcentagem, regra de três, médias, razão e proporção. Escreva os dados antes de calcular e confira se o resultado faz sentido.",example:"Um produto de R$ 150 tem desconto de 20%. Calcule 150 × 0,20 = 30. O desconto é R$ 30; o preço final é 150 − 30 = R$ 120.",tip:"10% é dividir por 10; 50% é metade; 25% é dividir por 4. Para 20%, calcule 10% e dobre.",questions:[
-["Um produto de R$ 200 recebe desconto de 15%. Preço final?",["R$ 185","R$ 170","R$ 160","R$ 150"],1,"15% de 200 = 30. Então 200 − 30 = R$ 170."],
-["Se 4 cadernos custam R$ 28, quanto custam 7 pelo mesmo preço?",["R$ 35","R$ 42","R$ 49","R$ 56"],2,"Cada caderno custa 28 ÷ 4 = R$ 7. Sete custam R$ 49."],
-["A média de 6, 8 e 10 é:",["7","8","9","24"],1,"Some 24 e divida por 3: média 8."],
-["Quanto é 3/4 de 80?",["20","40","60","70"],2,"80 ÷ 4 = 20; 20 × 3 = 60."],
-["Uma conta de R$ 120 foi dividida igualmente entre 4 pessoas. Cada uma paga:",["R$ 20","R$ 25","R$ 30","R$ 40"],2,"120 ÷ 4 = R$ 30."],
-["Se 5 trabalhadores fazem um serviço em 12 dias, mantendo o mesmo ritmo, 10 trabalhadores fariam em:",["3 dias","6 dias","12 dias","24 dias"],1,"É uma relação inversamente proporcional: dobrando trabalhadores, o tempo cai pela metade: 6 dias."],
-["A fração 1/2 equivale a:",["10%","25%","50%","75%"],2,"1 dividido por 2 é 0,5, equivalente a 50%."],
-["Um salário de R$ 1.500 aumenta 10%. Novo salário?",["R$ 1.550","R$ 1.600","R$ 1.650","R$ 1.700"],2,"10% de 1.500 = 150. Novo valor: R$ 1.650."]]},
-{id:"log",icon:"🧩",name:"Raciocínio Lógico",desc:"Sequências, proposições e problemas",lesson:"Procure a regra antes de marcar. Em sequências, compare os termos; em problemas, separe as informações; em lógica proposicional, atenção a “e”, “ou”, “se... então” e “não”.",example:"Sequência: 2, 5, 8, 11, __. A diferença entre termos é sempre +3. Logo, o próximo é 14.",tip:"Anote a diferença entre números consecutivos. Se não funcionar, teste multiplicação, alternância ou duas etapas.",questions:[
-["Qual número completa: 4, 8, 12, 16, __?",["18","20","22","24"],1,"A sequência aumenta de 4 em 4: 20."],
-["Todo servidor do setor A usa crachá. Ana trabalha no setor A. Então:",["Ana não usa crachá","Ana usa crachá","Todos usam uniforme","Não é possível concluir"],1,"Se todos do setor A usam crachá e Ana pertence ao setor, ela usa crachá."],
-["A negação de “Todos os candidatos estudaram” é:",["Nenhum estudou","Pelo menos um candidato não estudou","Todos não estudaram","Alguns estudaram"],1,"Negar “todos” é afirmar que existe pelo menos um que não atende à condição."],
-["Uma pessoa caminha 3 km por dia durante 5 dias. Total?",["8 km","12 km","15 km","20 km"],2,"3 × 5 = 15 km."],
-["Qual número vem a seguir: 1, 2, 4, 8, __?",["10","12","14","16"],3,"Cada termo é o dobro do anterior: 16."],
-["Se hoje é terça-feira, daqui a 10 dias será:",["Quinta-feira","Sexta-feira","Sábado","Domingo"],1,"10 dias equivalem a 7 + 3. Três dias após terça é sexta."],
-["A proposição “Está chovendo e faz frio” é verdadeira quando:",["Só chove","Só faz frio","As duas partes são verdadeiras","As duas partes são falsas"],2,"Na conjunção “e”, as duas proposições precisam ser verdadeiras."],
-["Em uma fila, João está antes de Maria e Maria antes de Pedro. Quem está primeiro?",["João","Maria","Pedro","Não é possível saber"],0,"A ordem informada é João, Maria, Pedro."]]},
-{id:"info",icon:"💻",name:"Informática",desc:"Sistema, internet, arquivos e segurança",lesson:"Estude hardware e software, sistema operacional, pastas e arquivos, navegadores, e-mail, editores de texto, planilhas e segurança digital. O edital pode especificar versões de programas: confira o que será cobrado.",example:"Atalhos comuns no Windows e em muitos programas: Ctrl+C copia; Ctrl+V cola; Ctrl+X recorta; Ctrl+Z desfaz. Atalhos podem variar conforme o programa.",tip:"Copiar mantém o original; recortar prepara para mover o conteúdo. Cuidado com anexos e links suspeitos.",questions:[
-["Qual atalho normalmente copia um texto?",["Ctrl + V","Ctrl + X","Ctrl + C","Ctrl + Z"],2,"Ctrl+C copia; Ctrl+V cola; Ctrl+X recorta; Ctrl+Z desfaz."],
-["Qual atitude ajuda a proteger uma conta?",["Repetir senha em todos sites","Compartilhar senha","Senha forte e autenticação em dois fatores","Abrir qualquer anexo"],2,"Senha forte e autenticação em dois fatores reduzem o risco de acesso indevido."],
-["Um navegador de internet serve para:",["Editar planilhas","Acessar páginas e serviços da web","Formatar computador","Substituir sistema operacional"],1,"Navegadores permitem acessar sites e aplicações web."],
-["Em uma planilha, uma célula é:",["Cruzamento de linha e coluna","Nome do arquivo","Página impressa","Tipo de vírus"],0,"Célula é a unidade formada pelo cruzamento de uma linha e uma coluna."],
-["Phishing é:",["Cópia de segurança","Tentativa de enganar para roubar dados","Atualização do sistema","Compactação de arquivo"],1,"Phishing usa mensagens ou páginas falsas para obter informações, senhas ou dados."],
-["Qual extensão costuma identificar um documento PDF?",[".mp3",".jpg",".pdf",".exe"],2,".pdf é a extensão de documentos no formato PDF."],
-["Uma cópia de segurança é chamada de:",["Backup","Download","Spam","Cookie"],0,"Backup é uma cópia de dados para recuperação em caso de perda."],
-["Em e-mail, o campo CCO normalmente:",["Mostra todos destinatários","Oculta os endereços dos demais destinatários","Apaga o anexo","Criptografa automaticamente"],1,"CCO envia cópia oculta, sem exibir os destinatários desse campo aos demais."]]},
-{id:"const",icon:"⚖️",name:"Direito Constitucional",desc:"Constituição e direitos fundamentais",lesson:"A Constituição Federal de 1988 organiza o Estado e protege direitos. Para muitos cargos, comece pelos princípios fundamentais (arts. 1º a 4º), direitos e garantias fundamentais (art. 5º) e Administração Pública (art. 37). Estude os dispositivos indicados no edital.",example:"O caput do art. 5º assegura os direitos à vida, liberdade, igualdade, segurança e propriedade, nos termos da Constituição. Diferencie o caput do conteúdo dos incisos.",tip:"Leia o texto constitucional atualizado. A banca pode trocar uma palavra e alterar o sentido.",questions:[
-["Qual Constituição está em vigor no Brasil?",["1824","1934","1988","1967"],2,"A Constituição Federal vigente foi promulgada em 5 de outubro de 1988."],
-["Qual conjunto aparece no caput do art. 5º?",["Vida, liberdade, igualdade, segurança e propriedade","Saúde, transporte, lazer e moradia","Emprego, salário e férias","Educação, cultura e previdência"],0,"O caput do art. 5º enumera vida, liberdade, igualdade, segurança e propriedade."],
-["Segundo o art. 1º, o Brasil constitui-se em:",["Estado unitário","Estado Democrático de Direito","Monarquia","Confederação"],1,"O art. 1º define o Brasil como Estado Democrático de Direito."],
-["A separação dos Poderes envolve:",["Executivo, Legislativo e Judiciário","União, estados e municípios","Polícia, MP e Defensoria","Presidente, governadores e prefeitos"],0,"A Constituição prevê Legislativo, Executivo e Judiciário como Poderes da União."],
-["A cidadania é, nos termos do art. 1º, um:",["Fundamento da República","Objetivo internacional","Poder municipal","Tipo de tributo"],0,"A cidadania está entre os fundamentos da República Federativa do Brasil."],
-["O pluralismo político é:",["Fundamento da República","Uma penalidade","Um tipo de eleição","Um princípio tributário"],0,"O pluralismo político consta do art. 1º como fundamento da República."],
-["A Constituição Federal foi promulgada em:",["5 de outubro de 1988","7 de setembro de 1822","15 de novembro de 1889","1º de maio de 1988"],0,"A Constituição de 1988 foi promulgada em 5 de outubro daquele ano."],
-["A igualdade perante a lei está prevista especialmente no:",["Art. 5º","Art. 100","Art. 170 apenas","Art. 225 apenas"],0,"O caput do art. 5º estabelece que todos são iguais perante a lei, sem distinção de qualquer natureza."]]},
-{id:"adm",icon:"🏛️",name:"Direito Administrativo",desc:"Princípios e Administração Pública",lesson:"Direito Administrativo estuda a atuação da Administração Pública. O art. 37 da Constituição traz os princípios expressos: legalidade, impessoalidade, moralidade, publicidade e eficiência (LIMPE). O edital pode incluir atos, poderes, serviços e agentes públicos.",example:"Um órgão divulga critérios de atendimento e aplica a mesma regra a todos. Publicidade promove transparência; impessoalidade evita favorecimentos. Uma situação pode envolver mais de um princípio.",tip:"Memorize LIMPE, mas aprenda a reconhecer cada princípio em situações práticas.",questions:[
-["Quais são os princípios expressos no caput do art. 37?",["Legalidade, impessoalidade, moralidade, publicidade e eficiência","Liberdade, igualdade, moralidade, rapidez e economia","Hierarquia, disciplina, sigilo, rapidez e eficiência","Publicidade, pessoalidade, autonomia, moralidade e rapidez"],0,"LIMPE: legalidade, impessoalidade, moralidade, publicidade e eficiência."],
-["Legalidade para a Administração significa:",["Agir conforme a própria vontade","Atuar conforme a lei e o ordenamento","Ignorar normas","Escolher quais leis cumprir"],1,"A Administração está submetida à lei e ao ordenamento jurídico."],
-["Divulgar atos administrativos, ressalvado sigilo legal, relaciona-se à:",["Publicidade","Pessoalidade","Informalidade","Competitividade"],0,"Publicidade promove transparência, observadas as exceções legais."],
-["Evitar favorecimentos pessoais relaciona-se à:",["Impessoalidade","Hierarquia","Autotutela","Continuidade"],0,"Impessoalidade impede favorecimentos e perseguições."],
-["Atuar com qualidade e bons resultados relaciona-se à:",["Eficiência","Publicidade","Moralidade apenas","Sigilo"],0,"Eficiência exige atuação com qualidade e busca de bons resultados."],
-["A moralidade administrativa exige:",["Conduta ética e proba","Apenas cumprir metas numéricas","Atender amigos primeiro","Esconder todos os atos"],0,"A atuação administrativa deve respeitar padrões éticos e de probidade."],
-["A Administração Pública direta inclui:",["Órgãos integrados às pessoas políticas","Somente empresas privadas","Apenas organizações internacionais","Somente concessionárias"],0,"A Administração direta é formada pelos órgãos das pessoas políticas: União, estados, DF e municípios."],
-["Um servidor usa o cargo para beneficiar um parente. Isso contraria especialmente:",["Impessoalidade e moralidade","Publicidade e eficiência apenas","Continuidade apenas","Nenhum princípio"],0,"Favorecimento pessoal contraria impessoalidade e moralidade."]]},
-{id:"etica",icon:"🤝",name:"Ética e Atendimento",desc:"Conduta, respeito e serviço ao cidadão",lesson:"O serviço público existe para atender à sociedade. Ética envolve honestidade, responsabilidade, respeito, cuidado com informações, tratamento igualitário e compromisso com o interesse público. O edital pode indicar código de ética específico: estude o documento exigido.",example:"Uma pessoa chega irritada ao balcão. O atendimento adequado é ouvir com respeito, explicar os procedimentos com clareza e aplicar as regras igualmente, sem prometer algo fora da competência do órgão.",tip:"Desconfie de alternativas que sugerem privilégio, grosseria, omissão ou uso do cargo para benefício próprio.",questions:[
-["No atendimento ao público, a conduta adequada é:",["Dar prioridade a conhecidos","Ouvir, orientar com respeito e seguir procedimentos","Discutir com o cidadão","Divulgar dados pessoais"],1,"O atendimento deve ser respeitoso, claro, impessoal e conforme os procedimentos."],
-["Usar informação do trabalho para benefício particular é:",["Aceitável","Eficiência","Conduta incompatível com ética pública","Obrigação"],2,"Informações e recursos públicos não devem ser usados para benefício particular."],
-["Diante de uma dúvida que não sabe responder, o atendente deve:",["Inventar resposta","Ignorar pessoa","Confirmar ou encaminhar ao setor competente","Encerrar atendimento"],2,"É melhor confirmar e encaminhar corretamente do que inventar."],
-["Igualdade no atendimento recomenda:",["Respeito e ausência de discriminação indevida","Atender amigos primeiro","Mudar regras para cada pessoa","Negar informação sem motivo"],0,"O atendimento deve respeitar as pessoas e aplicar critérios objetivos."],
-["Informações pessoais de usuários devem ser:",["Divulgadas livremente","Tratadas com cuidado e conforme a lei","Publicadas em redes sociais","Compartilhadas com conhecidos"],1,"Dados pessoais devem ser protegidos e tratados conforme as normas aplicáveis."],
-["Um conflito com cidadão deve ser conduzido com:",["Agressividade","Escuta, respeito e orientação objetiva","Ironia","Ameaças"],1,"A comunicação respeitosa e objetiva ajuda a resolver conflitos."],
-["O interesse público deve orientar:",["A atuação do agente público","Somente decisões particulares","A escolha de amigos","O uso privado dos bens públicos"],0,"O agente deve atuar para atender à finalidade pública, dentro da lei."],
-["O uso de bem público para finalidade particular, sem autorização, é:",["Sempre permitido","Conduta inadequada","Obrigatório","Um direito automático"],1,"Bens e recursos públicos devem ser usados para as finalidades autorizadas."]]}
-];
-const KEY="csc_complete_v1";
-function blank(){return {points:0,hits:0,attempts:0,answered:{},review:[],completed:[],dailyDate:"",daily:{},target:"Prefeitura / Câmara Municipal",studyDays:[]}}
-let state;try{state=JSON.parse(localStorage.getItem(KEY))||blank()}catch(e){state=blank()}
-let page="home",current=0,sim=null;
-function save(){localStorage.setItem(KEY,JSON.stringify(state));stats()}
-function stats(){
- let done=state.completed.length,pct=Math.round(done/subjects.length*100);
- document.getElementById("points").textContent=state.points;document.getElementById("hits").textContent=state.hits;document.getElementById("done").textContent=done;
- document.getElementById("pct").textContent=pct+"%";document.getElementById("progress").style.width=pct+"%";
- document.getElementById("answered").textContent=state.hits;document.getElementById("accuracy").textContent=state.attempts?Math.round(state.hits/state.attempts*100)+"%":"—";
- document.getElementById("reviewCount").textContent=state.review.length;document.getElementById("streak").textContent=state.studyDays.length;
+const subjects = {
+ "Português":[
+  ["Interpretação de texto","Ler, interpretar e identificar informações explícitas e implícitas.","A interpretação exige atenção ao contexto e à intenção do autor.","Em um texto, a ideia principal é aquela que:","Apresenta o assunto central","Repete todas as palavras","Traz apenas exemplos","Sempre aparece no título",0,"A ideia principal resume o assunto central desenvolvido pelo texto."],
+  ["Ortografia","A ortografia estabelece a escrita correta das palavras.","Na dúvida, consulte um dicionário e observe a regra aplicada.","Qual palavra está escrita corretamente?","Excessão","Exceção","Escessão","Excesssão",1,"A grafia correta é exceção."],
+  ["Classes de palavras","Substantivos nomeiam seres, objetos, lugares, sentimentos e ideias.","Adjetivos caracterizam os substantivos.","Na frase 'O servidor dedicado chegou', qual é o adjetivo?","Servidor","Chegou","Dedicado","O",2,"Dedicado caracteriza o servidor, portanto é adjetivo."],
+  ["Concordância verbal","O verbo deve concordar com o sujeito em número e pessoa.","Identifique o sujeito antes de escolher a forma verbal.","Qual frase está correta?","Os candidato chegou.","Os candidatos chegaram.","Os candidatos chega.","O candidatos chegaram.",1,"O sujeito está no plural; o verbo também deve ficar no plural."]
+ ],
+ "Matemática":[
+  ["Porcentagem","Porcentagem representa uma parte de 100.","Para calcular 10%, multiplique o valor por 0,10.","Quanto é 20% de 150?","15","20","30","45",2,"150 × 0,20 = 30."],
+  ["Regra de três","A regra de três relaciona grandezas proporcionais.","Organize os valores correspondentes antes de calcular.","Se 2 cadernos custam R$ 10, quanto custam 6 cadernos?","R$ 20","R$ 25","R$ 30","R$ 40",2,"Cada caderno custa R$ 5. Seis custam R$ 30."],
+  ["Frações","Frações representam partes de um todo.","Para somar frações com denominadores iguais, some os numeradores.","Quanto é 1/4 + 2/4?","1/4","2/4","3/4","3/8",2,"Os denominadores são iguais: 1 + 2 = 3, mantendo o denominador 4."],
+  ["Equação","Uma equação apresenta uma igualdade com uma incógnita.","Isole a incógnita realizando operações equivalentes nos dois lados.","Se x + 7 = 15, quanto vale x?","6","7","8","9",2,"Subtraindo 7 dos dois lados: x = 15 - 7 = 8."]
+ ],
+ "Raciocínio Lógico":[
+  ["Sequências","Observe a regra de formação dos números.","Verifique se existe soma, subtração, multiplicação ou alternância.","Qual número completa a sequência: 2, 4, 6, 8, ...?","9","10","11","12",1,"A sequência aumenta de 2 em 2. O próximo número é 10."],
+  ["Proposições","Uma proposição é uma frase declarativa que pode ser verdadeira ou falsa.","Perguntas e ordens não são proposições lógicas.","Qual frase é uma proposição?","Feche a porta!","Que horas são?","Brasília é a capital do Brasil.","Estude agora!",2,"A frase declarativa pode receber um valor lógico: verdadeiro ou falso."],
+  ["Negação","Negar uma afirmação significa apresentar seu contrário lógico.","A negação de 'todos' é 'pelo menos um não'.","A negação de 'Todos passaram' é:","Ninguém passou","Pelo menos uma pessoa não passou","Todos reprovaram","Alguns passaram",1,"Para negar que todos passaram, basta afirmar que pelo menos um não passou."],
+  ["Sequência","Sequências podem seguir padrões multiplicativos.","Compare cada termo com o anterior.","Qual o próximo número: 3, 6, 12, 24, ...?","30","36","42","48",3,"Cada termo é o dobro do anterior. O próximo é 48."]
+ ],
+ "Informática":[
+  ["Segurança digital","Senhas fortes e autenticação em dois fatores reduzem riscos.","Nunca compartilhe códigos recebidos por SMS ou aplicativo.","Qual atitude aumenta a segurança de uma conta?","Repetir a mesma senha em todos os sites","Compartilhar a senha com colegas","Ativar autenticação em dois fatores","Clicar em qualquer link recebido",2,"A autenticação em dois fatores adiciona uma camada de proteção."],
+  ["Internet","O navegador permite acessar páginas e serviços na internet.","Exemplos de navegadores incluem Chrome, Firefox e Edge.","Qual opção é um navegador?","Windows","Google Chrome","Excel","Linux",1,"Google Chrome é um navegador de internet."],
+  ["Planilhas","Planilhas organizam dados em linhas, colunas e células.","Fórmulas normalmente começam com o sinal de igual.","Qual símbolo inicia uma fórmula no Excel?","+","=","#","@",1,"No Excel, fórmulas começam com o sinal de igual."],
+  ["Arquivos","Extensões ajudam a identificar o formato dos arquivos.","PDF é usado para documentos com apresentação preservada.","Qual extensão identifica normalmente um arquivo PDF?"," .mp3",".pdf",".exe",".jpg",1,"A extensão .pdf identifica arquivos no formato PDF."]
+ ],
+ "Direito Constitucional":[
+  ["Direitos fundamentais","A Constituição Federal prevê direitos e garantias fundamentais.","O artigo 5º reúne direitos individuais e coletivos.","Segundo a Constituição, todos são iguais perante:","A lei","O governo local","O empregador","O município",0,"O artigo 5º estabelece que todos são iguais perante a lei."],
+  ["Administração pública","O artigo 37 apresenta princípios da administração pública.","Memorize LIMPE: legalidade, impessoalidade, moralidade, publicidade e eficiência.","Qual alternativa contém um princípio do artigo 37?","Intimidade","Eficiência","Popularidade","Hierarquia",1,"Eficiência é um dos princípios expressos no artigo 37."],
+  ["Poderes","A Constituição organiza o Estado em Poderes independentes e harmônicos.","Os Poderes da União são Legislativo, Executivo e Judiciário.","Qual é um dos Poderes da União?","Ministerial","Eleitoral","Judiciário","Municipal",2,"O Judiciário é um dos três Poderes da União."],
+  ["Nacionalidade","A Constituição define critérios para brasileiros natos e naturalizados.","É importante estudar as hipóteses previstas no artigo 12.","A Constituição trata da nacionalidade principalmente no artigo:","5º","12","37","144",1,"O artigo 12 da Constituição trata da nacionalidade."]
+ ],
+ "Direito Administrativo":[
+  ["Princípios","A administração pública deve respeitar os princípios constitucionais.","A legalidade exige atuação conforme a lei.","O princípio da legalidade significa que o agente público deve:","Agir conforme a lei","Agir conforme sua vontade","Ignorar regulamentos","Favorecer conhecidos",0,"O agente público deve atuar dentro das competências e limites legais."],
+  ["Atos administrativos","Atos administrativos são manifestações da administração com efeitos jurídicos.","Competência, finalidade, forma, motivo e objeto são elementos do ato.","Qual é um elemento do ato administrativo?","Popularidade","Competência","Amizade","Preferência",1,"Competência é um dos elementos do ato administrativo."],
+  ["Poderes administrativos","A administração possui poderes para cumprir suas funções públicas.","O poder disciplinar permite apurar infrações e aplicar sanções previstas.","O poder disciplinar está relacionado a:","Apurar infrações funcionais","Criar leis penais","Julgar ações judiciais","Realizar eleições",0,"O poder disciplinar permite apurar infrações e aplicar penalidades cabíveis."],
+  ["Serviço público","Serviços públicos atendem necessidades da coletividade.","A prestação deve observar as regras legais e a qualidade do serviço.","O serviço público deve buscar atender:","Somente interesses particulares","A coletividade","Apenas empresas privadas","Somente servidores",1,"O serviço público atende necessidades da coletividade."]
+ ],
+ "Ética e Atendimento":[
+  ["Ética","Ética envolve princípios que orientam a conduta humana.","No serviço público, a atuação deve respeitar o interesse coletivo.","Uma atitude ética no atendimento é:","Favorecer amigos","Tratar todos com respeito","Omitir informações públicas","Discriminar usuários",1,"O respeito e a igualdade de tratamento são essenciais."],
+  ["Atendimento","Um bom atendimento exige escuta, clareza e respeito.","Ouvir antes de responder ajuda a entender a necessidade do cidadão.","Qual atitude melhora o atendimento?","Interromper constantemente","Ignorar dúvidas","Ouvir com atenção","Usar linguagem ofensiva",2,"A escuta ativa permite compreender e responder melhor."],
+  ["Comunicação","A comunicação clara evita ruídos e mal-entendidos.","Use linguagem objetiva e adequada ao público.","Uma comunicação eficiente deve ser:","Clara e objetiva","Confusa e longa","Agressiva","Ambígua",0,"A clareza facilita a compreensão da mensagem."],
+  ["Responsabilidade","O servidor deve agir com zelo e responsabilidade.","O patrimônio público deve ser utilizado para finalidades públicas.","O uso correto de recursos públicos exige:","Uso pessoal sem autorização","Zelo e finalidade pública","Desperdício","Ausência de controle",1,"Os recursos públicos devem ser utilizados com responsabilidade."]
+ ]
+};
+
+let data=JSON.parse(localStorage.getItem("concursoV4")||"null")||{
+ points:0,answered:0,hits:0,attempts:{},wrong:[],done:{},daily:{date:"",count:0},history:[],tasks:{}
+};
+let current=null,exam=[],examIndex=0,examHits=0,examAnswered=0;
+function save(){localStorage.setItem("concursoV4",JSON.stringify(data));}
+function allQuestions(){
+ let arr=[];
+ Object.entries(subjects).forEach(([subject,qs])=>qs.forEach((q,i)=>arr.push({subject,id:subject+"-"+i,q})));
+ return arr;
 }
-function nav(){
- let items=[["home","🏠 Visão geral","Painel e matérias"],["review","🔁 Revisar erros",state.review.length+" pendentes"],["sim","⏱️ Simulado","20 questões misturadas"],["plan","🗓️ Plano de estudo","Rotina sugerida"],["sources","🔎 Fontes oficiais","Editais e legislação"]];
- document.getElementById("nav").innerHTML=items.map(x=>`<button class="${page===x[0]?"active":""}" onclick="go('${x[0]}')">${x[1]}<small>${x[2]}</small></button>`).join("")+subjects.map((s,i)=>`<button class="${page==="lesson"&&current===i?"active":""}" onclick="openSubject(${i})">${s.icon} ${s.name}<small>${state.completed.includes(s.id)?"Aula concluída":"Estudar matéria"}</small></button>`).join("");
+function showTab(id){
+ document.querySelectorAll("section").forEach(s=>s.classList.toggle("active",s.id===id));
+ document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===id));
+ if(id==="inicio")renderDashboard();
+ if(id==="revisao")renderReview();
+ if(id==="plano")renderPlan();
 }
-function go(p){page=p;nav();if(p==="home")home();if(p==="review")reviewPage();if(p==="sim")simStart();if(p==="plan")planPage();if(p==="sources")sourcesPage()}
-function home(){
- page="home";nav();let total=subjects.reduce((n,s)=>n+s.questions.length,0);
- document.getElementById("main").innerHTML=`<div class="eyebrow">Sua sala de estudos</div><h2>Bem-vindo à sua preparação!</h2><p class="lead">Você não precisa aprender tudo de uma vez. Aprenda um assunto, pratique, revise e avance. A aprovação é uma construção.</p><div class="callout"><b>O método CSC:</b> entender → ver exemplo → responder → corrigir → revisar. Não decore apenas a letra da resposta: entenda o raciocínio.</div><div class="row"><h3>Escolha uma matéria</h3><span class="pill">${total} questões autorais nesta versão</span></div><div class="cards">${subjects.map((s,i)=>`<div class="subject" onclick="openSubject(${i})"><strong>${s.icon} ${s.name}</strong><small>${s.desc}</small><div class="mini"><i style="width:${state.completed.includes(s.id)?100:0}%"></i></div><small>${state.completed.includes(s.id)?"Concluída":"Começar aula"}</small></div>`).join("")}</div><h3>Como usar este site para estudar forte</h3><ol><li>Escolha uma matéria e leia a explicação.</li><li>Resolva as questões sem consultar a resposta.</li><li>Leia o comentário mesmo quando acertar.</li><li>Volte à área “Revisar erros”.</li><li>Faça simulados e acompanhe seu aproveitamento.</li><li>Quando escolher um concurso, compare o conteúdo com o edital oficial.</li></ol><div class="actions"><button class="btn primary" onclick="openSubject(0)">Começar agora →</button><button class="btn outline" onclick="go('sim')">Fazer simulado</button></div>`;
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+
+function renderSubjects(){
+ let html="";
+ Object.entries(subjects).forEach(([name,qs])=>{
+  let correct=qs.filter((q,i)=>data.done[name+"-"+i]).length;
+  html+=`<div class="card subject"><h3>${name}</h3><p class="muted">${qs.length} questões disponíveis</p><div class="progress"><span style="width:${correct/qs.length*100}%"></span></div><p class="small">${correct} de ${qs.length} questões acertadas</p><button onclick="startSubject('${name.replace(/'/g,"\\'")}')">Estudar esta disciplina →</button></div>`;
+ });
+ document.getElementById("subjectList").innerHTML=html;
 }
-function openSubject(i){current=i;page="lesson";nav();lessonPage()}
-function lessonPage(){
- const s=subjects[current];document.getElementById("main").innerHTML=`<div class="eyebrow">Aula ${current+1} de ${subjects.length}</div><h2>${s.icon} ${s.name}</h2><p class="lead">${s.desc}</p><h3>📚 Entenda sem complicação</h3><p>${s.lesson}</p><div class="example"><b>✍️ Exemplo explicado</b><p>${s.example}</p></div><div class="callout">💡 <b>Dica de prova:</b> ${s.tip}</div><div class="row"><h3>🎮 Hora de treinar</h3><span class="pill">${s.questions.length} questões</span></div><div id="questionArea"></div><div class="actions"><button class="btn outline" onclick="go('home')">Voltar ao painel</button><button class="btn primary" onclick="openSubject(${(current+1)%subjects.length})">Próxima matéria →</button></div>`;
- renderQuestion(0);
+function startSubject(name){
+ current={name,index:0,questions:subjects[name].map((q,i)=>({subject:name,id:name+"-"+i,q}))};
+ showTab("materias");renderQuestion();
 }
-function qkey(s,i){return s.id+"_"+i}
-function renderQuestion(i){
- const s=subjects[current],q=s.questions[i],key=qkey(s,i),old=state.answered[key];
- document.getElementById("questionArea").innerHTML=`<div class="example"><div class="small muted">Questão ${i+1} de ${s.questions.length} • 10 pontos</div><p><b>${q[0]}</b></p><div id="opts">${q[1].map((o,n)=>`<button class="option" id="opt${n}" onclick="answer(${i},${n})">${String.fromCharCode(65+n)}) ${o}</button>`).join("")}</div><div id="feedback"></div><div class="actions"><button class="btn secondary" ${i===0?"disabled":""} onclick="renderQuestion(${i-1})">← Anterior</button><button class="btn secondary" ${i===s.questions.length-1?"disabled":""} onclick="renderQuestion(${i+1})">Próxima →</button></div></div>`;
- if(old!==undefined)showAnswer(i,old);
+function renderQuestion(){
+ let area=document.getElementById("lessonArea");
+ if(!current||current.index>=current.questions.length){area.innerHTML='<div class="card"><h3>Disciplina concluída!</h3><p>Você terminou esta sequência. Revise os erros ou escolha outra matéria.</p><button class="primary" onclick="renderSubjects()">Voltar às disciplinas</button></div>';return;}
+ let item=current.questions[current.index],q=item.q;
+ area.innerHTML=`<div class="card"><span class="tag">${item.subject}</span><span class="tag">Questão ${current.index+1} de ${current.questions.length}</span><h3>${q[0]}</h3><p>${q[1]}</p><p><b>Exemplo / dica:</b> ${q[2]}</p><hr><p class="question">${q[3]}</p><div id="options">${q.slice(4,8).map((o,i)=>`<button class="option" onclick="answer('${item.id}',${i},this)">${String.fromCharCode(65+i)}. ${o}</button>`).join("")}</div><div id="answerFeedback"></div><p class="muted small">A explicação será apresentada depois da resposta.</p></div>`;
 }
-function answer(i,n){
- const s=subjects[current],q=s.questions[i],key=qkey(s,i);
- if(state.answered[key]!==undefined)return;
- state.attempts++;
- if(n!==q[2]){
-  if(!state.review.includes(key))state.review.push(key);
-  save();document.getElementById("opt"+n).classList.add("bad");
-  document.getElementById("feedback").innerHTML=`<div class="feedback bad">Ainda não! Leia a explicação e tente novamente. Você consegue.<br>${q[3]}</div>`;return;
- }
- state.answered[key]=n;state.hits++;state.points+=10;state.review=state.review.filter(x=>x!==key);
- if(s.questions.every((_,j)=>state.answered[qkey(s,j)]!==undefined)&&!state.completed.includes(s.id))state.completed.push(s.id);
- save();showAnswer(i,n);nav();
+function dailyAdd(){
+ let today=new Date().toLocaleDateString("pt-BR");
+ if(data.daily.date!==today)data.daily={date:today,count:0};
+ data.daily.count++;save();
 }
-function showAnswer(i,n){
- const s=subjects[current],q=s.questions[i];document.querySelectorAll("#opts .option").forEach((b,j)=>{b.disabled=true;if(j===q[2])b.classList.add("good");if(j===n&&j!==q[2])b.classList.add("bad")});
- document.getElementById("feedback").innerHTML=`<div class="feedback good">✅ Correto! +10 pontos.<br>${q[3]}</div>`;
+function answer(id,choice,btn){
+ let item=current.questions[current.index],q=item.q;
+ if(data.attempts[id])return;
+ data.attempts[id]=true;data.answered++;dailyAdd();
+ let correct=choice===q[8];
+ if(correct){data.hits++;data.points+=10;data.done[id]=true;data.wrong=data.wrong.filter(x=>x!==id);}
+ else if(!data.wrong.includes(id)){data.wrong.push(id);}
+ document.querySelectorAll("#options button").forEach((b,i)=>{b.disabled=true;if(i===q[8])b.classList.add("correct");if(i===choice&&!correct)b.classList.add("wrong");});
+ document.getElementById("answerFeedback").innerHTML=`<div class="feedback ${correct?"good":"bad"}"><b>${correct?"Muito bem! +10 pontos":"Vamos aprender com o erro."}</b><p>${q[9]}</p><button class="primary" onclick="nextQuestion()">Próxima questão</button></div>`;
+ save();renderDashboard();
 }
-function reviewPage(){
- const pending=[];subjects.forEach(s=>s.questions.forEach((q,i)=>{let k=qkey(s,i);if(state.review.includes(k))pending.push({s,q,i,k})}));
- document.getElementById("main").innerHTML=`<div class="eyebrow">Aprender com os erros</div><h2>🔁 Revisão inteligente</h2><p class="lead">As questões que você errou aparecem aqui. Leia a explicação, volte à aula e tente novamente.</p>${pending.length?pending.map(x=>`<div class="example"><b>${x.s.name}</b><p>${x.q[0]}</p><p class="small"><b>Resposta correta:</b> ${x.q[1][x.q[2]]}</p><p>${x.q[3]}</p><button class="btn primary" onclick="openSubject(${subjects.indexOf(x.s)});renderQuestion(${x.i})">Estudar esta questão</button><button class="btn secondary" onclick="markReviewed('${x.k}')">Marcar como revisada</button></div>`).join(""):`<div class="callout">🎉 Nenhuma questão pendente! Continue praticando. Quando errar, ela aparecerá aqui.</div>`}`;
+function nextQuestion(){current.index++;renderQuestion();}
+
+function startExam(){
+ let pool=allQuestions();
+ for(let i=pool.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+ let count=Math.min(Number(document.getElementById("simCount").value),pool.length);
+ exam=pool.slice(0,count);examIndex=0;examHits=0;examAnswered=0;
+ showTab("simulado");renderExam();
 }
-function markReviewed(k){state.review=state.review.filter(x=>x!==k);save();reviewPage();nav()}
-function simStart(){
- page="sim";nav();let all=[];subjects.forEach(s=>s.questions.forEach((q,i)=>all.push({s,q,i})));
- all.sort(()=>Math.random()-.5);sim={items:all.slice(0,20),index:0,score:0,locked:false};
- drawSim();
+function renderExam(){
+ let area=document.getElementById("examArea");
+ if(examIndex>=exam.length){finishExam();return;}
+ let item=exam[examIndex],q=item.q;
+ area.innerHTML=`<div class="card"><span class="tag">Questão ${examIndex+1} de ${exam.length}</span><span class="tag">${item.subject}</span><p class="question">${q[3]}</p>${q.slice(4,8).map((o,i)=>`<button class="option" onclick="examAnswer(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join("")}</div>`;
 }
-function drawSim(){
- if(sim.index>=sim.items.length){document.getElementById("main").innerHTML=`<div class="eyebrow">Resultado do simulado</div><h2>🏁 Você terminou!</h2><p class="lead">Você acertou ${sim.score} de ${sim.items.length} questões (${Math.round(sim.score/sim.items.length*100)}%).</p><div class="callout">${sim.score>=16?"Ótimo desempenho! Mantenha a revisão e aumente a dificuldade.":sim.score>=10?"Bom começo. Identifique as matérias com mais erros e reforce o estudo.":"Não desanime. O simulado é um diagnóstico: agora você sabe o que precisa treinar."}</div><button class="btn primary" onclick="simStart()">Novo simulado</button> <button class="btn outline" onclick="go('home')">Voltar ao painel</button>`;return}
- let x=sim.items[sim.index];sim.locked=false;
- document.getElementById("main").innerHTML=`<div class="eyebrow">Simulado • Questão ${sim.index+1}/${sim.items.length}</div><h2>⏱️ Treino misto</h2><span class="pill">${x.s.name}</span><p><b>${x.q[0]}</b></p><div id="simOptions">${x.q[1].map((o,i)=>`<button class="option" onclick="simAnswer(${i})">${String.fromCharCode(65+i)}) ${o}</button>`).join("")}</div><div id="simFeedback"></div>`;
+function examAnswer(choice){
+ let q=exam[examIndex].q;
+ examAnswered++;
+ if(choice===q[8])examHits++;
+ else if(!data.wrong.includes(exam[examIndex].id))data.wrong.push(exam[examIndex].id);
+ examIndex++;renderExam();
 }
-function simAnswer(n){
- if(sim.locked)return;sim.locked=true;let x=sim.items[sim.index],ok=n===x.q[2];if(ok)sim.score++;
- document.querySelectorAll("#simOptions button").forEach((b,i)=>{b.disabled=true;if(i===x.q[2])b.classList.add("good");if(i===n&&!ok)b.classList.add("bad")});
- document.getElementById("simFeedback").innerHTML=`<div class="feedback ${ok?"good":"bad"}">${ok?"Acertou!":"Resposta correta: "+x.q[1][x.q[2]]}<br>${x.q[3]}</div><button class="btn primary" style="margin-top:12px" onclick="sim.index++;drawSim()">${sim.index===sim.items.length-1?"Ver resultado":"Próxima questão"}</button>`;
+function finishExam(){
+ let percent=Math.round(examHits/exam.length*100);
+ data.history.push({date:new Date().toLocaleString("pt-BR"),total:exam.length,hits:examHits,percent});
+ data.points+=examHits*5;save();
+ document.getElementById("examArea").innerHTML=`<div class="card"><h3>Resultado do simulado</h3><div class="stat">${percent}%</div><p>Você acertou ${examHits} de ${exam.length} questões.</p><p>${percent>=80?"Excelente desempenho! Continue revisando.":percent>=60?"Bom progresso. Reforce os assuntos em que errou.":"Não desanime. Use as explicações e tente novamente."}</p><button class="primary" onclick="startExam()">Fazer outro simulado</button></div>`;
+ renderDashboard();
 }
-function planPage(){
- document.getElementById("main").innerHTML=`<div class="eyebrow">Organização</div><h2>🗓️ Plano semanal sugerido</h2><p class="lead">Uma rotina inicial para quem tem cerca de uma hora por dia. Se tiver menos tempo, faça metade; se tiver mais, aumente as questões e revisões.</p><table><tr><th>Dia</th><th>Foco sugerido</th><th>Missão</th></tr><tr><td>Segunda</td><td>Português + Matemática</td><td>1 aula + 10 questões</td></tr><tr><td>Terça</td><td>Raciocínio + Informática</td><td>1 aula + 10 questões</td></tr><tr><td>Quarta</td><td>Constitucional</td><td>Leitura da Constituição + questões</td></tr><tr><td>Quinta</td><td>Administrativo</td><td>Princípios + questões</td></tr><tr><td>Sexta</td><td>Ética + Português</td><td>Revisão e interpretação</td></tr><tr><td>Sábado</td><td>Simulado</td><td>Prova cronometrada por você</td></tr><tr><td>Domingo</td><td>Revisão leve / descanso</td><td>Corrigir erros e descansar</td></tr></table><div class="callout"><b>Regra:</b> quando sair o edital, reorganize a semana conforme as matérias, pesos, número de questões e data da prova. Não siga cegamente um plano genérico.</div>`;
+function renderReview(){
+ let area=document.getElementById("reviewArea");
+ let items=data.wrong.map(id=>allQuestions().find(x=>x.id===id)).filter(Boolean);
+ if(!items.length){area.innerHTML='<div class="card">Parabéns! Não há questões pendentes de revisão.</div>';return;}
+ area.innerHTML=items.map(item=>`<div class="card"><span class="tag">${item.subject}</span><h3>${item.q[0]}</h3><p>${item.q[3]}</p><p><b>Resposta correta:</b> ${item.q[4+item.q[8]]}</p><p>${item.q[9]}</p><button class="primary" onclick="reviewQuestion('${item.id}')">Praticar novamente</button></div>`).join("");
 }
-function sourcesPage(){
- document.getElementById("main").innerHTML=`<div class="eyebrow">Atualização e confiabilidade</div><h2>🔎 Fontes oficiais para acompanhar</h2><p class="lead">O conteúdo desta plataforma é uma base de estudo. Para saber o que realmente cai, consulte o edital e os documentos oficiais do concurso escolhido.</p><h3>Constituição e legislação</h3><a class="resource" target="_blank" rel="noopener" href="https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm">Constituição Federal — Planalto</a><br><a class="resource" target="_blank" rel="noopener" href="https://www.planalto.gov.br/ccivil_03/leis/">Legislação federal — Planalto</a><h3>Concursos e órgãos públicos</h3><a class="resource" target="_blank" rel="noopener" href="https://www.gov.br/gestao/pt-br">Ministério da Gestão e da Inovação</a><br><a class="resource" target="_blank" rel="noopener" href="https://www.gov.br/">Portal Gov.br</a><h3>Bancas examinadoras</h3><p>Consulte sempre o site indicado no edital. Exemplos de organizadoras:</p><a class="resource" target="_blank" rel="noopener" href="https://www.cebraspe.org.br/">Cebraspe</a><a class="resource" target="_blank" rel="noopener" href="https://www.fgv.br/">FGV</a><a class="resource" target="_blank" rel="noopener" href="https://www.vunesp.com.br/">Vunesp</a><a class="resource" target="_blank" rel="noopener" href="https://www.ibfc.org.br/">IBFC</a><div class="callout"><b>Como manter o site atualizado:</b> esta versão não busca notícias automaticamente. Para publicar atualizações, revise questões e fontes, altere o arquivo index.html e envie a nova versão ao GitHub. Assim evitamos apresentar conteúdo desatualizado como se fosse atual.</div><p class="small muted">Última revisão editorial desta versão: 08/11/2026. As questões são autorais e servem para aprendizagem; não são questões oficiais de bancas.</p>`;
+function reviewQuestion(id){
+ let item=allQuestions().find(x=>x.id===id);
+ current={name:item.subject,index:0,questions:[item]};
+ delete data.attempts[id];save();showTab("materias");renderQuestion();
 }
-function dailyInit(){
- let today=new Date().toISOString().slice(0,10);if(state.dailyDate!==today){state.dailyDate=today;state.daily={};save()}
- document.querySelectorAll("[data-task]").forEach(el=>{el.checked=!!state.daily[el.dataset.task];el.addEventListener("change",()=>{state.daily[el.dataset.task]=el.checked;if(Object.values(state.daily).some(Boolean)&&!state.studyDays.includes(today))state.studyDays.push(today);save();let n=Object.values(state.daily).filter(Boolean).length;document.getElementById("dailyMsg").textContent=n===4?"👏 Missão diária concluída!":n+" de 4 tarefas concluídas. Continue!";})});
+function renderDashboard(){
+ let accuracy=data.answered?Math.round(data.hits/data.answered*100):0;
+ document.getElementById("points").textContent=data.points;
+ document.getElementById("answered").textContent=data.answered;
+ document.getElementById("hits").textContent=data.hits;
+ document.getElementById("accuracy").textContent=accuracy+"%";
+ let bar=data.answered?Math.min(100,accuracy):0;
+ document.getElementById("overallBar").style.width=bar+"%";
+ document.getElementById("overallText").textContent=accuracy+"% de aproveitamento geral.";
+ let today=new Date().toLocaleDateString("pt-BR");
+ let count=data.daily.date===today?data.daily.count:0;
+ document.getElementById("dailyBar").style.width=Math.min(100,count*10)+"%";
+ document.getElementById("dailyText").textContent=count+" de 10 questões respondidas hoje.";
+ let weakest=Object.entries(subjects).map(([name,qs])=>({name,score:qs.filter((q,i)=>data.done[name+"-"+i]).length/qs.length})).sort((a,b)=>a.score-b.score)[0];
+ document.getElementById("recommendation").textContent=data.answered?`Continue estudando ${weakest.name}. É uma boa oportunidade para reforçar sua preparação.`:"Comece escolhendo uma disciplina. Seu desempenho ajudará a indicar o que estudar.";
+ document.getElementById("historyText").textContent=data.history.length?data.history.map(h=>`${h.date}: ${h.hits}/${h.total} acertos (${h.percent}%)`).join(" | "):"Nenhum simulado realizado ainda.";
 }
-function exportData(){let blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="meu-progresso-concurso.json";a.click();URL.revokeObjectURL(a.href)}
-function resetData(){if(confirm("Tem certeza que deseja apagar seu progresso salvo neste navegador?")){state=blank();save();home();nav();dailyInit()}}
-document.getElementById("target").value=state.target;document.getElementById("target").addEventListener("change",e=>{state.target=e.target.value;save()});
-stats();dailyInit();home();nav();
+function renderPlan(){
+ let days=["Segunda: Português e interpretação","Terça: Matemática e porcentagem","Quarta: Informática e segurança digital","Quinta: Direito Constitucional","Sexta: Direito Administrativo","Sábado: Raciocínio Lógico e Ética","Domingo: Simulado e revisão"];
+ document.getElementById("weeklyPlan").innerHTML=days.map(x=>`<div class="list-item">📘 ${x}</div>`).join("");
+ let tasks=["Estudar uma aula","Responder 10 questões","Revisar uma questão errada","Ler um resumo ou anotação"];
+ document.getElementById("dailyTasks").innerHTML=tasks.map((x,i)=>`<div class="list-item"><label><input type="checkbox" ${data.tasks[i]?"checked":""} onchange="data.tasks[${i}]=this.checked;save()"> ${x}</label></div>`).join("");
+}
+function exportProgress(){
+ let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+ let a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="meu-progresso-concurso.json";a.click();URL.revokeObjectURL(a.href);
+}
+function resetProgress(){
+ if(!confirm("Tem certeza que deseja apagar seu progresso salvo neste navegador?"))return;
+ localStorage.removeItem("concursoV4");location.reload();
+}
+function init(){
+ renderSubjects();renderDashboard();renderPlan();
+}
+init();
 </script>
 </body>
 </html>
