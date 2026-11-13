@@ -153,7 +153,17 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid #3
  <p class="small">Material didático de apoio. Consulte sempre o edital e a legislação atualizada do seu concurso.</p>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
+ 
+const SUPABASE_URL = "https://hzoyafytlslpwmwqsymc.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable_A7exQAHPnVIT-XoBbp0mVw_gYSw00et";
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 const subjects = {
  "Português":[
   ["Interpretação de texto","Ler, interpretar e identificar informações explícitas e implícitas.","A interpretação exige atenção ao contexto e à intenção do autor.","Em um texto, a ideia principal é aquela que:","Apresenta o assunto central","Repete todas as palavras","Traz apenas exemplos","Sempre aparece no título",0,"A ideia principal resume o assunto central desenvolvido pelo texto."],
