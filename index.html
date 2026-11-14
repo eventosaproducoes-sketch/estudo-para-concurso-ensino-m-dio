@@ -5,9 +5,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#101827">
-<title>Concurso sem Complicação | Preparação Premium</title>
+<title>Concurso sem Complicação</title>
 <style>
-:root{--bg:#101827;--panel:#192538;--panel2:#223249;--text:#f4f7fb;--muted:#aab8ca;--gold:#f2bd55;--green:#38c98b;--red:#ff7777;--blue:#65a9ff}
+:root{--bg:#101827;--panel:#192538;--panel2:#223249;--text:#f4f7fb;--muted:#aab8ca;--gold:#f2bd55;--green:#38c98b;--red:#ff7777}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
 header{padding:24px 5%;background:#0b1220;border-bottom:1px solid #34445b;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
@@ -57,7 +57,7 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid #3
   <h1>🎓 CONCURSO SEM COMPLICAÇÃO</h1>
   <p>Preparação de qualidade, gratuita e acessível para todos.</p>
  </div>
- <div><span class="tag">VERSÃO 4.0</span><span class="tag">NÍVEL MÉDIO</span></div>
+ <div><span class="tag">VERSÃO 4.1</span><span class="tag">NÍVEL MÉDIO</span></div>
 </header>
 
 <nav>
@@ -66,6 +66,7 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid #3
  <button data-tab="simulado">Simulados</button>
  <button data-tab="revisao">Revisão</button>
  <button data-tab="plano">Plano de estudos</button>
+ <button data-tab="ranking">🏆 Ranking</button>
 </nav>
 
 <main>
@@ -145,6 +146,23 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid #3
   <button class="secondary" onclick="resetProgress()">Reiniciar progresso</button>
  </div>
 </section>
+
+<section id="ranking">
+ <h2>🏆 Ranking dos participantes</h2>
+ <p class="muted">Classificação pública dos participantes dos torneios cadastrados no sistema.</p>
+ <div class="card">
+  <div class="grid">
+   <div><div class="muted">Participantes no ranking</div><div class="stat" id="rankingCount">—</div></div>
+   <div><div class="muted">Atualização</div><div class="stat" style="font-size:18px" id="rankingUpdated">—</div></div>
+  </div>
+  <button class="primary" onclick="loadRanking()">Atualizar ranking</button>
+  <p class="small muted" id="rankingStatus" role="status">Carregando classificação...</p>
+ </div>
+ <div class="card">
+  <div id="rankingList"><p class="muted">Consultando o ranking público...</p></div>
+ </div>
+ <p class="small muted">A classificação depende dos resultados registrados nos torneios. O progresso de estudo salvo apenas neste navegador não é enviado automaticamente ao ranking.</p>
+</section>
 </main>
 
 <footer>
@@ -154,16 +172,15 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid #3
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
- 
-const SUPABASE_URL = "https://hzoyafytlslpwmwqsymc.supabase.co";
-
+const SUPABASE_URL = "https://hzoyafytsllpwmwqsymc.supabase.co";
 const SUPABASE_KEY = "sb_publishable_A7exQAHPnVIT-XoBbp0mVw_gYSw00et";
+
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
+
 const subjects = {
  "Português":[
   ["Interpretação de texto","Ler, interpretar e identificar informações explícitas e implícitas.","A interpretação exige atenção ao contexto e à intenção do autor.","Em um texto, a ideia principal é aquela que:","Apresenta o assunto central","Repete todas as palavras","Traz apenas exemplos","Sempre aparece no título",0,"A ideia principal resume o assunto central desenvolvido pelo texto."],
@@ -187,7 +204,7 @@ const subjects = {
   ["Segurança digital","Senhas fortes e autenticação em dois fatores reduzem riscos.","Nunca compartilhe códigos recebidos por SMS ou aplicativo.","Qual atitude aumenta a segurança de uma conta?","Repetir a mesma senha em todos os sites","Compartilhar a senha com colegas","Ativar autenticação em dois fatores","Clicar em qualquer link recebido",2,"A autenticação em dois fatores adiciona uma camada de proteção."],
   ["Internet","O navegador permite acessar páginas e serviços na internet.","Exemplos de navegadores incluem Chrome, Firefox e Edge.","Qual opção é um navegador?","Windows","Google Chrome","Excel","Linux",1,"Google Chrome é um navegador de internet."],
   ["Planilhas","Planilhas organizam dados em linhas, colunas e células.","Fórmulas normalmente começam com o sinal de igual.","Qual símbolo inicia uma fórmula no Excel?","+","=","#","@",1,"No Excel, fórmulas começam com o sinal de igual."],
-  ["Arquivos","Extensões ajudam a identificar o formato dos arquivos.","PDF é usado para documentos com apresentação preservada.","Qual extensão identifica normalmente um arquivo PDF?"," .mp3",".pdf",".exe",".jpg",1,"A extensão .pdf identifica arquivos no formato PDF."]
+  ["Arquivos","Extensões ajudam a identificar o formato dos arquivos.","PDF é usado para documentos com apresentação preservada.","Qual extensão identifica normalmente um arquivo PDF?",".mp3",".pdf",".exe",".jpg",1,"A extensão .pdf identifica arquivos no formato PDF."]
  ],
  "Direito Constitucional":[
   ["Direitos fundamentais","A Constituição Federal prevê direitos e garantias fundamentais.","O artigo 5º reúne direitos individuais e coletivos.","Segundo a Constituição, todos são iguais perante:","A lei","O governo local","O empregador","O município",0,"O artigo 5º estabelece que todos são iguais perante a lei."],
@@ -210,132 +227,385 @@ const subjects = {
 };
 
 let data=JSON.parse(localStorage.getItem("concursoV4")||"null")||{
- points:0,answered:0,hits:0,attempts:{},wrong:[],done:{},daily:{date:"",count:0},history:[],tasks:{}
+ points:0,answered:0,hits:0,attempts:{},wrong:[],done:{},
+ daily:{date:"",count:0},history:[],tasks:{}
 };
+
 let current=null,exam=[],examIndex=0,examHits=0,examAnswered=0;
-function save(){localStorage.setItem("concursoV4",JSON.stringify(data));}
+
+function save(){
+ localStorage.setItem("concursoV4",JSON.stringify(data));
+}
+
 function allQuestions(){
  let arr=[];
- Object.entries(subjects).forEach(([subject,qs])=>qs.forEach((q,i)=>arr.push({subject,id:subject+"-"+i,q})));
+ Object.entries(subjects).forEach(([subject,qs])=>
+  qs.forEach((q,i)=>arr.push({subject,id:subject+"-"+i,q}))
+ );
  return arr;
 }
+
 function showTab(id){
- document.querySelectorAll("section").forEach(s=>s.classList.toggle("active",s.id===id));
- document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===id));
+ document.querySelectorAll("section").forEach(s=>
+  s.classList.toggle("active",s.id===id)
+ );
+ document.querySelectorAll("nav button").forEach(b=>
+  b.classList.toggle("active",b.dataset.tab===id)
+ );
  if(id==="inicio")renderDashboard();
  if(id==="revisao")renderReview();
  if(id==="plano")renderPlan();
+ if(id==="ranking")loadRanking();
 }
-document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+
+document.querySelectorAll("nav button").forEach(b=>
+ b.onclick=()=>showTab(b.dataset.tab)
+);
 
 function renderSubjects(){
  let html="";
  Object.entries(subjects).forEach(([name,qs])=>{
   let correct=qs.filter((q,i)=>data.done[name+"-"+i]).length;
-  html+=`<div class="card subject"><h3>${name}</h3><p class="muted">${qs.length} questões disponíveis</p><div class="progress"><span style="width:${correct/qs.length*100}%"></span></div><p class="small">${correct} de ${qs.length} questões acertadas</p><button onclick="startSubject('${name.replace(/'/g,"\\'")}')">Estudar esta disciplina →</button></div>`;
+  html+=`<div class="card subject">
+   <h3>${name}</h3>
+   <p class="muted">${qs.length} questões disponíveis</p>
+   <div class="progress"><span style="width:${correct/qs.length*100}%"></span></div>
+   <p class="small">${correct} de ${qs.length} questões acertadas</p>
+   <button onclick="startSubject('${name.replace(/'/g,"\\'")}')">Estudar esta disciplina →</button>
+  </div>`;
  });
  document.getElementById("subjectList").innerHTML=html;
 }
+
 function startSubject(name){
- current={name,index:0,questions:subjects[name].map((q,i)=>({subject:name,id:name+"-"+i,q}))};
- showTab("materias");renderQuestion();
+ current={name,index:0,questions:subjects[name].map((q,i)=>({
+  subject:name,id:name+"-"+i,q
+ }))};
+ showTab("materias");
+ renderQuestion();
 }
+
 function renderQuestion(){
  let area=document.getElementById("lessonArea");
- if(!current||current.index>=current.questions.length){area.innerHTML='<div class="card"><h3>Disciplina concluída!</h3><p>Você terminou esta sequência. Revise os erros ou escolha outra matéria.</p><button class="primary" onclick="renderSubjects()">Voltar às disciplinas</button></div>';return;}
+ if(!current||current.index>=current.questions.length){
+  area.innerHTML='<div class="card"><h3>Disciplina concluída!</h3><p>Você terminou esta sequência. Revise os erros ou escolha outra matéria.</p><button class="primary" onclick="renderSubjects()">Voltar às disciplinas</button></div>';
+  return;
+ }
  let item=current.questions[current.index],q=item.q;
- area.innerHTML=`<div class="card"><span class="tag">${item.subject}</span><span class="tag">Questão ${current.index+1} de ${current.questions.length}</span><h3>${q[0]}</h3><p>${q[1]}</p><p><b>Exemplo / dica:</b> ${q[2]}</p><hr><p class="question">${q[3]}</p><div id="options">${q.slice(4,8).map((o,i)=>`<button class="option" onclick="answer('${item.id}',${i},this)">${String.fromCharCode(65+i)}. ${o}</button>`).join("")}</div><div id="answerFeedback"></div><p class="muted small">A explicação será apresentada depois da resposta.</p></div>`;
+ area.innerHTML=`<div class="card">
+  <span class="tag">${item.subject}</span>
+  <span class="tag">Questão ${current.index+1} de ${current.questions.length}</span>
+  <h3>${q[0]}</h3>
+  <p>${q[1]}</p>
+  <p><b>Exemplo / dica:</b> ${q[2]}</p>
+  <hr>
+  <p class="question">${q[3]}</p>
+  <div id="options">${q.slice(4,8).map((o,i)=>
+   `<button class="option" onclick="answer('${item.id}',${i},this)">${String.fromCharCode(65+i)}. ${o}</button>`
+  ).join("")}</div>
+  <div id="answerFeedback"></div>
+  <p class="muted small">A explicação será apresentada depois da resposta.</p>
+ </div>`;
 }
+
 function dailyAdd(){
  let today=new Date().toLocaleDateString("pt-BR");
  if(data.daily.date!==today)data.daily={date:today,count:0};
- data.daily.count++;save();
+ data.daily.count++;
+ save();
 }
+
 function answer(id,choice,btn){
  let item=current.questions[current.index],q=item.q;
  if(data.attempts[id])return;
- data.attempts[id]=true;data.answered++;dailyAdd();
+ data.attempts[id]=true;
+ data.answered++;
+ dailyAdd();
  let correct=choice===q[8];
- if(correct){data.hits++;data.points+=10;data.done[id]=true;data.wrong=data.wrong.filter(x=>x!==id);}
- else if(!data.wrong.includes(id)){data.wrong.push(id);}
- document.querySelectorAll("#options button").forEach((b,i)=>{b.disabled=true;if(i===q[8])b.classList.add("correct");if(i===choice&&!correct)b.classList.add("wrong");});
- document.getElementById("answerFeedback").innerHTML=`<div class="feedback ${correct?"good":"bad"}"><b>${correct?"Muito bem! +10 pontos":"Vamos aprender com o erro."}</b><p>${q[9]}</p><button class="primary" onclick="nextQuestion()">Próxima questão</button></div>`;
- save();renderDashboard();
+
+ if(correct){
+  data.hits++;
+  data.points+=10;
+  data.done[id]=true;
+  data.wrong=data.wrong.filter(x=>x!==id);
+ }else if(!data.wrong.includes(id)){
+  data.wrong.push(id);
+ }
+
+ document.querySelectorAll("#options button").forEach((b,i)=>{
+  b.disabled=true;
+  if(i===q[8])b.classList.add("correct");
+  if(i===choice&&!correct)b.classList.add("wrong");
+ });
+
+ document.getElementById("answerFeedback").innerHTML=
+  `<div class="feedback ${correct?"good":"bad"}">
+   <b>${correct?"Muito bem! +10 pontos":"Vamos aprender com o erro."}</b>
+   <p>${q[9]}</p>
+   <button class="primary" onclick="nextQuestion()">Próxima questão</button>
+  </div>`;
+
+ save();
+ renderDashboard();
 }
-function nextQuestion(){current.index++;renderQuestion();}
+
+function nextQuestion(){
+ current.index++;
+ renderQuestion();
+}
 
 function startExam(){
  let pool=allQuestions();
- for(let i=pool.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+ for(let i=pool.length-1;i>0;i--){
+  let j=Math.floor(Math.random()*(i+1));
+  [pool[i],pool[j]]=[pool[j],pool[i]];
+ }
  let count=Math.min(Number(document.getElementById("simCount").value),pool.length);
- exam=pool.slice(0,count);examIndex=0;examHits=0;examAnswered=0;
- showTab("simulado");renderExam();
+ exam=pool.slice(0,count);
+ examIndex=0;
+ examHits=0;
+ examAnswered=0;
+ showTab("simulado");
+ renderExam();
 }
+
 function renderExam(){
  let area=document.getElementById("examArea");
- if(examIndex>=exam.length){finishExam();return;}
+ if(examIndex>=exam.length){
+  finishExam();
+  return;
+ }
  let item=exam[examIndex],q=item.q;
- area.innerHTML=`<div class="card"><span class="tag">Questão ${examIndex+1} de ${exam.length}</span><span class="tag">${item.subject}</span><p class="question">${q[3]}</p>${q.slice(4,8).map((o,i)=>`<button class="option" onclick="examAnswer(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join("")}</div>`;
+ area.innerHTML=`<div class="card">
+  <span class="tag">Questão ${examIndex+1} de ${exam.length}</span>
+  <span class="tag">${item.subject}</span>
+  <p class="question">${q[3]}</p>
+  ${q.slice(4,8).map((o,i)=>
+   `<button class="option" onclick="examAnswer(${i})">${String.fromCharCode(65+i)}. ${o}</button>`
+  ).join("")}
+ </div>`;
 }
+
 function examAnswer(choice){
  let q=exam[examIndex].q;
  examAnswered++;
- if(choice===q[8])examHits++;
- else if(!data.wrong.includes(exam[examIndex].id))data.wrong.push(exam[examIndex].id);
- examIndex++;renderExam();
+ if(choice===q[8]){
+  examHits++;
+ }else if(!data.wrong.includes(exam[examIndex].id)){
+  data.wrong.push(exam[examIndex].id);
+ }
+ examIndex++;
+ renderExam();
 }
+
 function finishExam(){
  let percent=Math.round(examHits/exam.length*100);
- data.history.push({date:new Date().toLocaleString("pt-BR"),total:exam.length,hits:examHits,percent});
- data.points+=examHits*5;save();
- document.getElementById("examArea").innerHTML=`<div class="card"><h3>Resultado do simulado</h3><div class="stat">${percent}%</div><p>Você acertou ${examHits} de ${exam.length} questões.</p><p>${percent>=80?"Excelente desempenho! Continue revisando.":percent>=60?"Bom progresso. Reforce os assuntos em que errou.":"Não desanime. Use as explicações e tente novamente."}</p><button class="primary" onclick="startExam()">Fazer outro simulado</button></div>`;
+ data.history.push({
+  date:new Date().toLocaleString("pt-BR"),
+  total:exam.length,
+  hits:examHits,
+  percent
+ });
+ data.points+=examHits*5;
+ save();
+
+ document.getElementById("examArea").innerHTML=
+  `<div class="card">
+   <h3>Resultado do simulado</h3>
+   <div class="stat">${percent}%</div>
+   <p>Você acertou ${examHits} de ${exam.length} questões.</p>
+   <p>${percent>=80?"Excelente desempenho! Continue revisando.":percent>=60?"Bom progresso. Reforce os assuntos em que errou.":"Não desanime. Use as explicações e tente novamente."}</p>
+   <button class="primary" onclick="startExam()">Fazer outro simulado</button>
+  </div>`;
+
  renderDashboard();
 }
+
 function renderReview(){
  let area=document.getElementById("reviewArea");
  let items=data.wrong.map(id=>allQuestions().find(x=>x.id===id)).filter(Boolean);
- if(!items.length){area.innerHTML='<div class="card">Parabéns! Não há questões pendentes de revisão.</div>';return;}
- area.innerHTML=items.map(item=>`<div class="card"><span class="tag">${item.subject}</span><h3>${item.q[0]}</h3><p>${item.q[3]}</p><p><b>Resposta correta:</b> ${item.q[4+item.q[8]]}</p><p>${item.q[9]}</p><button class="primary" onclick="reviewQuestion('${item.id}')">Praticar novamente</button></div>`).join("");
+
+ if(!items.length){
+  area.innerHTML='<div class="card">Parabéns! Não há questões pendentes de revisão.</div>';
+  return;
+ }
+
+ area.innerHTML=items.map(item=>
+  `<div class="card">
+   <span class="tag">${item.subject}</span>
+   <h3>${item.q[0]}</h3>
+   <p>${item.q[3]}</p>
+   <p><b>Resposta correta:</b> ${item.q[4+item.q[8]]}</p>
+   <p>${item.q[9]}</p>
+   <button class="primary" onclick="reviewQuestion('${item.id}')">Praticar novamente</button>
+  </div>`
+ ).join("");
 }
+
 function reviewQuestion(id){
  let item=allQuestions().find(x=>x.id===id);
  current={name:item.subject,index:0,questions:[item]};
- delete data.attempts[id];save();showTab("materias");renderQuestion();
+ delete data.attempts[id];
+ save();
+ showTab("materias");
+ renderQuestion();
 }
+
 function renderDashboard(){
- let accuracy=data.answered?Math.round(data.hits/data.answered*100):0;
+ let accuracy=data.answered?
+  Math.round(data.hits/data.answered*100):0;
+
  document.getElementById("points").textContent=data.points;
  document.getElementById("answered").textContent=data.answered;
  document.getElementById("hits").textContent=data.hits;
  document.getElementById("accuracy").textContent=accuracy+"%";
+
  let bar=data.answered?Math.min(100,accuracy):0;
  document.getElementById("overallBar").style.width=bar+"%";
- document.getElementById("overallText").textContent=accuracy+"% de aproveitamento geral.";
+ document.getElementById("overallText").textContent=
+  accuracy+"% de aproveitamento geral.";
+
  let today=new Date().toLocaleDateString("pt-BR");
  let count=data.daily.date===today?data.daily.count:0;
- document.getElementById("dailyBar").style.width=Math.min(100,count*10)+"%";
- document.getElementById("dailyText").textContent=count+" de 10 questões respondidas hoje.";
- let weakest=Object.entries(subjects).map(([name,qs])=>({name,score:qs.filter((q,i)=>data.done[name+"-"+i]).length/qs.length})).sort((a,b)=>a.score-b.score)[0];
- document.getElementById("recommendation").textContent=data.answered?`Continue estudando ${weakest.name}. É uma boa oportunidade para reforçar sua preparação.`:"Comece escolhendo uma disciplina. Seu desempenho ajudará a indicar o que estudar.";
- document.getElementById("historyText").textContent=data.history.length?data.history.map(h=>`${h.date}: ${h.hits}/${h.total} acertos (${h.percent}%)`).join(" | "):"Nenhum simulado realizado ainda.";
+
+ document.getElementById("dailyBar").style.width=
+  Math.min(100,count*10)+"%";
+ document.getElementById("dailyText").textContent=
+  count+" de 10 questões respondidas hoje.";
+
+ let weakest=Object.entries(subjects).map(([name,qs])=>({
+  name,
+  score:qs.filter((q,i)=>data.done[name+"-"+i]).length/qs.length
+ })).sort((a,b)=>a.score-b.score)[0];
+
+ document.getElementById("recommendation").textContent=
+  data.answered?
+  `Continue estudando ${weakest.name}. É uma boa oportunidade para reforçar sua preparação.`:
+  "Comece escolhendo uma disciplina. Seu desempenho ajudará a indicar o que estudar.";
+
+ document.getElementById("historyText").textContent=
+  data.history.length?
+  data.history.map(h=>`${h.date}: ${h.hits}/${h.total} acertos (${h.percent}%)`).join(" | "):
+  "Nenhum simulado realizado ainda.";
 }
+
 function renderPlan(){
- let days=["Segunda: Português e interpretação","Terça: Matemática e porcentagem","Quarta: Informática e segurança digital","Quinta: Direito Constitucional","Sexta: Direito Administrativo","Sábado: Raciocínio Lógico e Ética","Domingo: Simulado e revisão"];
- document.getElementById("weeklyPlan").innerHTML=days.map(x=>`<div class="list-item">📘 ${x}</div>`).join("");
- let tasks=["Estudar uma aula","Responder 10 questões","Revisar uma questão errada","Ler um resumo ou anotação"];
- document.getElementById("dailyTasks").innerHTML=tasks.map((x,i)=>`<div class="list-item"><label><input type="checkbox" ${data.tasks[i]?"checked":""} onchange="data.tasks[${i}]=this.checked;save()"> ${x}</label></div>`).join("");
+ let days=[
+  "Segunda: Português e interpretação",
+  "Terça: Matemática e porcentagem",
+  "Quarta: Informática e segurança digital",
+  "Quinta: Direito Constitucional",
+  "Sexta: Direito Administrativo",
+  "Sábado: Raciocínio Lógico e Ética",
+  "Domingo: Simulado e revisão"
+ ];
+
+ document.getElementById("weeklyPlan").innerHTML=
+  days.map(x=>`<div class="list-item">📘 ${x}</div>`).join("");
+
+ let tasks=[
+  "Estudar uma aula",
+  "Responder 10 questões",
+  "Revisar uma questão errada",
+  "Ler um resumo ou anotação"
+ ];
+
+ document.getElementById("dailyTasks").innerHTML=
+  tasks.map((x,i)=>
+   `<div class="list-item">
+    <label><input type="checkbox" ${data.tasks[i]?"checked":""}
+    onchange="data.tasks[${i}]=this.checked;save()"> ${x}</label>
+   </div>`
+  ).join("");
 }
+
 function exportProgress(){
- let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
- let a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="meu-progresso-concurso.json";a.click();URL.revokeObjectURL(a.href);
+ let blob=new Blob([JSON.stringify(data,null,2)],{
+  type:"application/json"
+ });
+ let a=document.createElement("a");
+ a.href=URL.createObjectURL(blob);
+ a.download="meu-progresso-concurso.json";
+ a.click();
+ URL.revokeObjectURL(a.href);
 }
+
 function resetProgress(){
  if(!confirm("Tem certeza que deseja apagar seu progresso salvo neste navegador?"))return;
- localStorage.removeItem("concursoV4");location.reload();
+ localStorage.removeItem("concursoV4");
+ location.reload();
 }
+
+async function loadRanking(){
+ const list=document.getElementById("rankingList");
+ const status=document.getElementById("rankingStatus");
+ const count=document.getElementById("rankingCount");
+ const updated=document.getElementById("rankingUpdated");
+
+ if(!list||!status)return;
+
+ status.textContent="Consultando o Supabase...";
+ list.innerHTML='<p class="muted">Carregando...</p>';
+
+ try{
+  const {data:rows,error}=await supabaseClient
+   .from("public_ranking_geral")
+   .select("participante,pontos,torneios_participados")
+   .order("pontos",{ascending:false})
+   .limit(100);
+
+  if(error)throw error;
+
+  const ranking=rows||[];
+  count.textContent=ranking.length;
+  updated.textContent=new Date().toLocaleTimeString("pt-BR",{
+   hour:"2-digit",minute:"2-digit"
+  });
+
+  if(!ranking.length){
+   list.innerHTML="<p>Nenhum participante aparece no ranking ainda. Assim que houver resultados registrados nos torneios, eles serão exibidos aqui.</p>";
+   status.textContent="Consulta concluída. Nenhum resultado cadastrado.";
+   return;
+  }
+
+  list.innerHTML=
+   '<div class="list-item" style="display:grid;grid-template-columns:55px 1fr 90px 110px;gap:8px;font-weight:bold"><span>Pos.</span><span>Participante</span><span>Pontos</span><span>Torneios</span></div>'+
+   ranking.map((r,i)=>
+    `<div class="list-item" style="display:grid;grid-template-columns:55px 1fr 90px 110px;gap:8px;align-items:center">
+     <strong>${i+1}º</strong>
+     <span>${escapeHTML(r.participante||"Participante")}</span>
+     <strong>${Number(r.pontos||0).toLocaleString("pt-BR")}</strong>
+     <span>${Number(r.torneios_participados||0)}</span>
+    </div>`
+   ).join("");
+
+  status.textContent="Ranking atualizado com sucesso.";
+
+ }catch(error){
+  console.error("Erro ao carregar ranking:",error);
+  count.textContent="—";
+  updated.textContent="—";
+  list.innerHTML="<p>Não foi possível carregar o ranking. Confira a conexão, o nome da view e as permissões de leitura no Supabase.</p>";
+  status.textContent="Falha na consulta: "+(error.message||"erro desconhecido");
+ }
+}
+
+function escapeHTML(value){
+ return String(value).replace(/[&<>"']/g,ch=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
+ }[ch]));
+}
+
 function init(){
- renderSubjects();renderDashboard();renderPlan();
+ renderSubjects();
+ renderDashboard();
+ renderPlan();
 }
+
 init();
 </script>
 </body>
