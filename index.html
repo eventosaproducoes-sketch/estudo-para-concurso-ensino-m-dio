@@ -1,13 +1,12 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#101827">
-<title>Concurso sem Complicação</title>
+<title>Concurso sem Complicação | Preparação Premium</title>
 <style>
-:root{--bg:#101827;--panel:#192538;--panel2:#223249;--text:#f4f7fb;--muted:#aab8ca;--gold:#f2bd55;--green:#38c98b;--red:#ff7777}
+:root{--bg:#101827;--panel:#192538;--panel2:#223249;--text:#f4f7fb;--muted:#aab8ca;--gold:#f2bd55;--green:#38c98b;--red:#ff7777;--blue:#65a9ff}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
 header{padding:24px 5%;background:#0b1220;border-bottom:1px solid #34445b;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
@@ -67,6 +66,7 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid #3
  <button data-tab="revisao">Revisão</button>
  <button data-tab="plano">Plano de estudos</button>
  <button data-tab="ranking">🏆 Ranking</button>
+ <button data-tab="conta">👤 Minha conta</button>
 </nav>
 
 <main>
@@ -147,20 +147,44 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid #3
  </div>
 </section>
 
+<section id="conta">
+ <h2>👤 Minha conta</h2>
+ <p class="muted">Crie sua conta gratuita para ter um apelido público e participar dos torneios.</p>
+ <div class="card" id="accountLoggedOut">
+  <h3>Criar conta</h3>
+  <label for="signupNickname">Apelido público</label><br><br>
+  <input id="signupNickname" maxlength="24" placeholder="Ex.: Estudante123" autocomplete="nickname" style="width:100%"><br><br>
+  <label for="signupEmail">E-mail</label><br><br>
+  <input id="signupEmail" type="email" placeholder="seuemail@exemplo.com" autocomplete="email" style="width:100%"><br><br>
+  <label for="signupPassword">Senha (mínimo 8 caracteres)</label><br><br>
+  <input id="signupPassword" type="password" minlength="8" placeholder="Crie uma senha" autocomplete="new-password" style="width:100%"><br><br>
+  <button class="primary" onclick="signUp()">Criar minha conta</button>
+  <hr style="border-color:#34445b;margin:22px 0">
+  <h3>Já tenho cadastro</h3>
+  <label for="loginEmail">E-mail</label><br><br>
+  <input id="loginEmail" type="email" placeholder="seuemail@exemplo.com" autocomplete="email" style="width:100%"><br><br>
+  <label for="loginPassword">Senha</label><br><br>
+  <input id="loginPassword" type="password" placeholder="Sua senha" autocomplete="current-password" style="width:100%"><br><br>
+  <button class="primary" onclick="signIn()">Entrar</button>
+  <p id="authMessage" class="small muted" role="status">O cadastro pode exigir confirmação do e-mail antes do primeiro acesso.</p>
+ </div>
+ <div class="card" id="accountLoggedIn" style="display:none">
+  <h3>Você está conectado!</h3>
+  <p>Apelido público: <strong id="accountNickname">—</strong></p>
+  <label for="editNickname">Alterar apelido</label><br><br>
+  <input id="editNickname" maxlength="24" placeholder="Novo apelido" style="width:100%"><br><br>
+  <button class="primary" onclick="saveNickname()">Salvar apelido</button>
+  <button class="secondary" onclick="signOut()">Sair da conta</button>
+  <p id="accountMessage" class="small muted" role="status"></p>
+ </div>
+ <div class="card"><b>Privacidade e segurança</b><p class="small muted">Seu e-mail não aparece no ranking. Somente o apelido público e os resultados do torneio serão exibidos. Nunca compartilhe sua senha ou a chave secreta do Supabase.</p></div>
+</section>
+
 <section id="ranking">
  <h2>🏆 Ranking dos participantes</h2>
  <p class="muted">Classificação pública dos participantes dos torneios cadastrados no sistema.</p>
- <div class="card">
-  <div class="grid">
-   <div><div class="muted">Participantes no ranking</div><div class="stat" id="rankingCount">—</div></div>
-   <div><div class="muted">Atualização</div><div class="stat" style="font-size:18px" id="rankingUpdated">—</div></div>
-  </div>
-  <button class="primary" onclick="loadRanking()">Atualizar ranking</button>
-  <p class="small muted" id="rankingStatus" role="status">Carregando classificação...</p>
- </div>
- <div class="card">
-  <div id="rankingList"><p class="muted">Consultando o ranking público...</p></div>
- </div>
+ <div class="card"><div class="grid"><div><div class="muted">Participantes no ranking</div><div class="stat" id="rankingCount">—</div></div><div><div class="muted">Atualização</div><div class="stat" style="font-size:18px" id="rankingUpdated">—</div></div></div><button class="primary" onclick="loadRanking()">Atualizar ranking</button><p class="small muted" id="rankingStatus" role="status">Carregando classificação...</p></div>
+ <div class="card"><div id="rankingList"><p class="muted">Consultando o ranking público...</p></div></div>
  <p class="small muted">A classificação depende dos resultados registrados nos torneios. O progresso de estudo salvo apenas neste navegador não é enviado automaticamente ao ranking.</p>
 </section>
 </main>
@@ -180,6 +204,101 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
+
+let currentUser = null;
+let currentProfile = null;
+
+function setAuthMessage(message, loggedIn=false){
+  const el=document.getElementById(loggedIn?"accountMessage":"authMessage");
+  if(el)el.textContent=message;
+}
+
+async function ensureProfile(user, nickname="") {
+  const {data:profile,error}=await supabaseClient.from("profiles").select("id,nickname").eq("id",user.id).maybeSingle();
+  if(error)throw error;
+  if(profile){
+    if(nickname && nickname.trim() && nickname.trim()!==profile.nickname){
+      const {data:updated,error:updateError}=await supabaseClient.from("profiles").update({nickname:nickname.trim()}).eq("id",user.id).select("id,nickname").single();
+      if(updateError)throw updateError;
+      currentProfile=updated;
+    } else currentProfile=profile;
+  } else {
+    const clean=(nickname||user.user_metadata?.nickname||("Estudante"+user.id.slice(0,5))).trim().slice(0,24);
+    const {data:created,error:createError}=await supabaseClient.from("profiles").insert({id:user.id,nickname:clean}).select("id,nickname").single();
+    if(createError)throw createError;
+    currentProfile=created;
+  }
+  renderAuth();
+}
+
+function renderAuth(){
+  const out=document.getElementById("accountLoggedOut"),inside=document.getElementById("accountLoggedIn");
+  if(!out||!inside)return;
+  out.style.display=currentUser?"none":"block";
+  inside.style.display=currentUser?"block":"none";
+  if(currentUser){
+    const nick=currentProfile?.nickname||currentUser.user_metadata?.nickname||"Participante";
+    document.getElementById("accountNickname").textContent=nick;
+    document.getElementById("editNickname").value=nick;
+  }
+}
+
+async function signUp(){
+  const nickname=document.getElementById("signupNickname").value.trim();
+  const email=document.getElementById("signupEmail").value.trim();
+  const password=document.getElementById("signupPassword").value;
+  if(nickname.length<3){setAuthMessage("Escolha um apelido com pelo menos 3 caracteres.");return;}
+  if(!email||password.length<8){setAuthMessage("Informe um e-mail válido e uma senha com pelo menos 8 caracteres.");return;}
+  setAuthMessage("Criando sua conta...");
+  const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{nickname},emailRedirectTo:window.location.href}});
+  if(error){setAuthMessage("Não foi possível criar a conta: "+error.message);return;}
+  if(data.user&&data.session){
+    currentUser=data.user;
+    try{await ensureProfile(data.user,nickname);setAuthMessage("Conta criada e perfil configurado!",true);}
+    catch(e){setAuthMessage("Conta criada, mas não consegui salvar o apelido: "+e.message,true);}
+  }else{
+    setAuthMessage("Cadastro iniciado! Confira sua caixa de entrada e confirme o e-mail. Depois volte aqui e entre com sua conta.");
+  }
+}
+
+async function signIn(){
+  const email=document.getElementById("loginEmail").value.trim();
+  const password=document.getElementById("loginPassword").value;
+  setAuthMessage("Entrando...");
+  const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
+  if(error){setAuthMessage("Não foi possível entrar: "+error.message);return;}
+  currentUser=data.user;
+  try{await ensureProfile(data.user);setAuthMessage("Login realizado com sucesso.",true);}
+  catch(e){setAuthMessage("Você entrou, mas houve um problema no perfil: "+e.message,true);}
+}
+
+async function saveNickname(){
+  if(!currentUser)return;
+  const nickname=document.getElementById("editNickname").value.trim();
+  if(nickname.length<3||nickname.length>24){setAuthMessage("O apelido deve ter entre 3 e 24 caracteres.",true);return;}
+  const {data,error}=await supabaseClient.from("profiles").update({nickname}).eq("id",currentUser.id).select("id,nickname").single();
+  if(error){setAuthMessage("Não foi possível alterar o apelido: "+error.message,true);return;}
+  currentProfile=data;renderAuth();setAuthMessage("Apelido atualizado.",true);
+}
+
+async function signOut(){
+  const {error}=await supabaseClient.auth.signOut();
+  if(error){setAuthMessage("Erro ao sair: "+error.message,true);return;}
+  currentUser=null;currentProfile=null;renderAuth();setAuthMessage("Você saiu da sua conta.");
+}
+
+async function initAuth(){
+  const {data,error}=await supabaseClient.auth.getSession();
+  if(error)console.error("Erro ao recuperar sessão",error);
+  currentUser=data?.session?.user||null;
+  if(currentUser){try{await ensureProfile(currentUser);}catch(e){console.error("Erro no perfil",e);setAuthMessage("Não foi possível carregar seu perfil: "+e.message,true);}}
+  renderAuth();
+  supabaseClient.auth.onAuthStateChange((_event,session)=>{
+    currentUser=session?.user||null;
+    if(!currentUser){currentProfile=null;renderAuth();}
+    else setTimeout(()=>ensureProfile(currentUser).catch(e=>setAuthMessage(e.message,true)),0);
+  });
+}
 
 const subjects = {
  "Português":[
@@ -204,7 +323,187 @@ const subjects = {
   ["Segurança digital","Senhas fortes e autenticação em dois fatores reduzem riscos.","Nunca compartilhe códigos recebidos por SMS ou aplicativo.","Qual atitude aumenta a segurança de uma conta?","Repetir a mesma senha em todos os sites","Compartilhar a senha com colegas","Ativar autenticação em dois fatores","Clicar em qualquer link recebido",2,"A autenticação em dois fatores adiciona uma camada de proteção."],
   ["Internet","O navegador permite acessar páginas e serviços na internet.","Exemplos de navegadores incluem Chrome, Firefox e Edge.","Qual opção é um navegador?","Windows","Google Chrome","Excel","Linux",1,"Google Chrome é um navegador de internet."],
   ["Planilhas","Planilhas organizam dados em linhas, colunas e células.","Fórmulas normalmente começam com o sinal de igual.","Qual símbolo inicia uma fórmula no Excel?","+","=","#","@",1,"No Excel, fórmulas começam com o sinal de igual."],
-  ["Arquivos","Extensões ajudam a identificar o formato dos arquivos.","PDF é usado para documentos com apresentação preservada.","Qual extensão identifica normalmente um arquivo PDF?",".mp3",".pdf",".exe",".jpg",1,"A extensão .pdf identifica arquivos no formato PDF."]
+  ["Arquivos","Extensões ajudam a identificar o formato dos arquivos.","PDF é usado para documentos com apresentação preservada.","Qual extensão identifica normalmente um arquivo PDF?"," .mp3",".pdf",".exe",".jpg",1,"A extensão .pdf identifica arquivos no formato PDF."]
+ ],
+ "Direito Constitucional":[
+  ["Direitos fundamentais","A Constituição Federal prevê direitos e garantias fundamentais.","O artigo 5º reúne direitos individuais e coletivos.","Segundo a Constituição, todos são iguais perante:","A lei","O governo local","O empregador","O município",0,"O artigo 5º estabelece que todos são iguais perante a lei."],
+  ["Administração pública","O artigo 37 apresenta princípios da administração pública.","Memorize LIMPE: legalidade, impessoalidade, moralidade, publicidade e eficiência.","Qual alternativa contém um princípio do artigo 37?","Intimidade","Eficiência","Popularidade","Hierarquia",1,"Eficiência é um dos princípios expressos no artigo 37."],
+  ["Poderes","A Constituição organiza o Estado em Poderes independentes e harmônicos.","Os Poderes da União são Legislativo, Executivo e Judiciário.","Qual é um dos Poderes da União?","Ministerial","Eleitoral","Judiciário","Municipal",2,"O Judiciário é um dos três Poderes da União."],
+  ["Nacionalidade","A Constituição define critérios para brasileiros natos e naturalizados.","É importante estudar as hipóteses previstas no artigo 12.","A Constituição trata da nacionalidade principalmente no artigo:","5º","12","37","144",1,"O artigo 12 da Constituição trata da nacionalidade."]
+ ],
+ "Direito Administrativo":[
+  ["Princípios","A administração pública deve respeitar os princípios constitucionais.","A legalidade exige atuação conforme a lei.","O princípio da legalidade significa que o agente público deve:","Agir conforme a lei","Agir conforme sua vontade","Ignorar regulamentos","Favorecer conhecidos",0,"O agente público deve atuar dentro das competências e limites legais."],
+  ["Atos administrativos","Atos administrativos são manifestações da administração com efeitos jurídicos.","Competência, finalidade, forma, motivo e objeto são elementos do ato.","Qual é um elemento do ato administrativo?","Popularidade","Competência","Amizade","Preferência",1,"Competência é um dos elementos do ato administrativo."],
+  ["Poderes administrativos","A administração possui poderes para cumprir suas funções públicas.","O poder disciplinar permite apurar infrações e aplicar sanções previstas em lei.","Qual poder permite apurar infrações funcionais?","Poder disciplinar","Poder econômico","Poder eleitoral","Poder familiar",0,"O poder disciplinar permite apurar infrações e aplicar penalidades cabíveis."],
+  ["Serviços públicos","Serviços públicos atendem necessidades coletivas.","A prestação deve observar continuidade e eficiência, conforme o regime aplicável.","Um serviço público deve buscar atender:","Somente interesses particulares","Necessidades coletivas","Apenas empresas privadas","Somente servidores",1,"O serviço público é destinado ao atendimento de necessidades da coletividade."]
+ ],
+ "Ética e Atendimento":[
+  ["Ética no serviço público","A ética orienta a conduta responsável do servidor.","Respeito, honestidade e responsabilidade são atitudes essenciais.","Uma conduta ética no atendimento é:","Tratar todos com respeito","Favorecer amigos","Divulgar dados sigilosos","Ignorar o cidadão",0,"O atendimento deve respeitar a dignidade e os direitos de todas as pessoas."],
+  ["Atendimento ao cidadão","O atendimento deve ser claro, respeitoso e eficiente.","Ouça a demanda e explique os próximos passos de forma objetiva.","Um bom atendimento deve ser:","Agressivo","Claro e respeitoso","Confuso","Indiferente",1,"A comunicação clara e respeitosa melhora o atendimento ao cidadão."],
+  ["Sigilo","Informações protegidas não devem ser divulgadas sem autorização legal.","Trate dados pessoais com cuidado e siga as regras de acesso.","O servidor deve proteger:","Somente informações próprias","Dados pessoais e informações sigilosas","Todas as conversas públicas","Senhas de colegas",1,"O servidor deve respeitar o sigilo e as regras de proteção de dados."],
+  ["Comunicação","A comunicação clara evita ruídos e mal-entendidos.","Use linguagem objetiva e adequada ao público.","Uma comunicação eficiente deve ser:","Clara e objetiva","Confusa e longa","Agressiva","Ambígua",0,"A clareza facilita a compreensão da mensagem."],
+  ["Responsabilidade","O servidor deve agir com zelo e responsabilidade.","O patrimônio público deve ser utilizado para finalidades públicas.","O uso correto de recursos públicos exige:","Uso pessoal sem autorização","Zelo e finalidade pública","Desperdício","Ausência de controle",1,"Os recursos públicos devem ser utilizados com responsabilidade."]
+ ]
+};
+
+let data=JSON.parse(localStorage.getItem("concursoV4")||"null")||{
+ points:0,answered:0,hits:0,attempts:{},wrong:[],done:{},daily:{date:"",count:0},history:[],tasks:{}
+};
+
+let current=null,exam=[],examIndex=0,examHits=0,examAnswered=0;
+
+function save(){localStorage.setItem("concursoV4",JSON.stringify(data));}
+
+function allQuestions(){
+ let arr=[];
+ Object.entries(subjects).forEach(([subject,qs])=>qs.forEach((q,i)=>arr.push({subject,id:subject+"-"+i,q})));
+ return arr;
+}
+
+function showTab(id){
+ document.querySelectorAll("section").forEach(s=>s.classList.toggle("active",s.id===id));
+ document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===id));
+ if(id==="inicio")renderDashboard();
+ if(id==="revisao")renderReview();
+ if(id==="plano")renderPlan();
+ if(id==="ranking")loadRanking();
+}
+
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+
+function renderSubjects(){
+ let html="";
+ Object.entries(subjects).forEach(([name,qs])=>{
+  let correct=qs.filter((q,i)=>data.done[name+"-"+i]).length;
+  html+=`<div class="card subject"><h3>${name}</h3><p class="muted">${qs.length} questões disponíveis</p><div class="progress"><span style="width:${correct/qs.length*100}%"></span></div><p class="small">${correct} de ${qs.length} questões acertadas</p><button onclick="startSubject('${name.replace(/'/g,"\\'")}')">Estudar esta disciplina →</button></div>`;
+ });
+ document.getElementById("subjectList").innerHTML=html;
+}
+
+function startSubject(name){
+ current={name,index:0,questions:subjects[name].map((q,i)=>({subject:name,id:name+"-"+i,q}))};
+ showTab("materias");renderQuestion();
+}
+ <script>
+
+const SUPABASE_URL = "https://hzoyafytsllpwmwqsymc.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable_A7exQAHPnVIT-XoBbp0mVw_gYSw00et";
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+let currentUser = null;
+let currentProfile = null;
+function setAuthMessage(message, loggedIn=false){
+  const el=document.getElementById(loggedIn?"accountMessage":"authMessage");
+  if(el)el.textContent=message;
+}
+async function ensureProfile(user, nickname="") {
+  const {data:profile,error}=await supabaseClient.from("profiles").select("id,nickname").eq("id",user.id).maybeSingle();
+  if(error)throw error;
+  if(profile){
+    if(nickname && nickname.trim() && nickname.trim()!==profile.nickname){
+      const {data:updated,error:updateError}=await supabaseClient.from("profiles").update({nickname:nickname.trim()}).eq("id",user.id).select("id,nickname").single();
+      if(updateError)throw updateError;
+      currentProfile=updated;
+    } else currentProfile=profile;
+  } else {
+    const clean=(nickname||user.user_metadata?.nickname||("Estudante"+user.id.slice(0,5))).trim().slice(0,24);
+    const {data:created,error:createError}=await supabaseClient.from("profiles").insert({id:user.id,nickname:clean}).select("id,nickname").single();
+    if(createError)throw createError;
+    currentProfile=created;
+  }
+  renderAuth();
+}
+function renderAuth(){
+  const out=document.getElementById("accountLoggedOut"),inside=document.getElementById("accountLoggedIn");
+  if(!out||!inside)return;
+  out.style.display=currentUser?"none":"block";
+  inside.style.display=currentUser?"block":"none";
+  if(currentUser){
+    const nick=currentProfile?.nickname||currentUser.user_metadata?.nickname||"Participante";
+    document.getElementById("accountNickname").textContent=nick;
+    document.getElementById("editNickname").value=nick;
+  }
+}
+async function signUp(){
+  const nickname=document.getElementById("signupNickname").value.trim();
+  const email=document.getElementById("signupEmail").value.trim();
+  const password=document.getElementById("signupPassword").value;
+  if(nickname.length<3){setAuthMessage("Escolha um apelido com pelo menos 3 caracteres.");return;}
+  if(!email||password.length<8){setAuthMessage("Informe um e-mail válido e uma senha com pelo menos 8 caracteres.");return;}
+  setAuthMessage("Criando sua conta...");
+  const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{nickname},emailRedirectTo:window.location.href}});
+  if(error){setAuthMessage("Não foi possível criar a conta: "+error.message);return;}
+  if(data.user&&data.session){
+    currentUser=data.user;
+    try{await ensureProfile(data.user,nickname);setAuthMessage("Conta criada e perfil configurado!",true);}
+    catch(e){setAuthMessage("Conta criada, mas não consegui salvar o apelido: "+e.message,true);}
+  }else{
+    setAuthMessage("Cadastro iniciado! Confira sua caixa de entrada e confirme o e-mail. Depois volte aqui e entre com sua conta.");
+  }
+}
+async function signIn(){
+  const email=document.getElementById("loginEmail").value.trim();
+  const password=document.getElementById("loginPassword").value;
+  setAuthMessage("Entrando...");
+  const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
+  if(error){setAuthMessage("Não foi possível entrar: "+error.message);return;}
+  currentUser=data.user;
+  try{await ensureProfile(data.user);setAuthMessage("Login realizado com sucesso.",true);}
+  catch(e){setAuthMessage("Você entrou, mas houve um problema no perfil: "+e.message,true);}
+}
+async function saveNickname(){
+  if(!currentUser)return;
+  const nickname=document.getElementById("editNickname").value.trim();
+  if(nickname.length<3||nickname.length>24){setAuthMessage("O apelido deve ter entre 3 e 24 caracteres.",true);return;}
+  const {data,error}=await supabaseClient.from("profiles").update({nickname}).eq("id",currentUser.id).select("id,nickname").single();
+  if(error){setAuthMessage("Não foi possível alterar o apelido: "+error.message,true);return;}
+  currentProfile=data;renderAuth();setAuthMessage("Apelido atualizado.",true);
+}
+async function signOut(){
+  const {error}=await supabaseClient.auth.signOut();
+  if(error){setAuthMessage("Erro ao sair: "+error.message,true);return;}
+  currentUser=null;currentProfile=null;renderAuth();setAuthMessage("Você saiu da sua conta.");
+}
+async function initAuth(){
+  const {data,error}=await supabaseClient.auth.getSession();
+  if(error)console.error("Erro ao recuperar sessão",error);
+  currentUser=data?.session?.user||null;
+  if(currentUser){try{await ensureProfile(currentUser);}catch(e){console.error("Erro no perfil",e);setAuthMessage("Não foi possível carregar seu perfil: "+e.message,true);}}
+  renderAuth();
+  supabaseClient.auth.onAuthStateChange((_event,session)=>{
+    currentUser=session?.user||null;
+    if(!currentUser){currentProfile=null;renderAuth();}
+    else setTimeout(()=>ensureProfile(currentUser).catch(e=>setAuthMessage(e.message,true)),0);
+  });
+}
+const subjects = {
+ "Português":[
+  ["Interpretação de texto","Ler, interpretar e identificar informações explícitas e implícitas.","A interpretação exige atenção ao contexto e à intenção do autor.","Em um texto, a ideia principal é aquela que:","Apresenta o assunto central","Repete todas as palavras","Traz apenas exemplos","Sempre aparece no título",0,"A ideia principal resume o assunto central desenvolvido pelo texto."],
+  ["Ortografia","A ortografia estabelece a escrita correta das palavras.","Na dúvida, consulte um dicionário e observe a regra aplicada.","Qual palavra está escrita corretamente?","Excessão","Exceção","Escessão","Excesssão",1,"A grafia correta é exceção."],
+  ["Classes de palavras","Substantivos nomeiam seres, objetos, lugares, sentimentos e ideias.","Adjetivos caracterizam os substantivos.","Na frase 'O servidor dedicado chegou', qual é o adjetivo?","Servidor","Chegou","Dedicado","O",2,"Dedicado caracteriza o servidor, portanto é adjetivo."],
+  ["Concordância verbal","O verbo deve concordar com o sujeito em número e pessoa.","Identifique o sujeito antes de escolher a forma verbal.","Qual frase está correta?","Os candidato chegou.","Os candidatos chegaram.","Os candidatos chega.","O candidatos chegaram.",1,"O sujeito está no plural; o verbo também deve ficar no plural."]
+ ],
+ "Matemática":[
+  ["Porcentagem","Porcentagem representa uma parte de 100.","Para calcular 10%, multiplique o valor por 0,10.","Quanto é 20% de 150?","15","20","30","45",2,"150 × 0,20 = 30."],
+  ["Regra de três","A regra de três relaciona grandezas proporcionais.","Organize os valores correspondentes antes de calcular.","Se 2 cadernos custam R$ 10, quanto custam 6 cadernos?","R$ 20","R$ 25","R$ 30","R$ 40",2,"Cada caderno custa R$ 5. Seis custam R$ 30."],
+  ["Frações","Frações representam partes de um todo.","Para somar frações com denominadores iguais, some os numeradores.","Quanto é 1/4 + 2/4?","1/4","2/4","3/4","3/8",2,"Os denominadores são iguais: 1 + 2 = 3, mantendo o denominador 4."],
+  ["Equação","Uma equação apresenta uma igualdade com uma incógnita.","Isole a incógnita realizando operações equivalentes nos dois lados.","Se x + 7 = 15, quanto vale x?","6","7","8","9",2,"Subtraindo 7 dos dois lados: x = 15 - 7 = 8."]
+ ],
+ "Raciocínio Lógico":[
+  ["Sequências","Observe a regra de formação dos números.","Verifique se existe soma, subtração, multiplicação ou alternância.","Qual número completa a sequência: 2, 4, 6, 8, ...?","9","10","11","12",1,"A sequência aumenta de 2 em 2. O próximo número é 10."],
+  ["Proposições","Uma proposição é uma frase declarativa que pode ser verdadeira ou falsa.","Perguntas e ordens não são proposições lógicas.","Qual frase é uma proposição?","Feche a porta!","Que horas são?","Brasília é a capital do Brasil.","Estude agora!",2,"A frase declarativa pode receber um valor lógico: verdadeiro ou falso."],
+  ["Negação","Negar uma afirmação significa apresentar seu contrário lógico.","A negação de 'todos' é 'pelo menos um não'.","A negação de 'Todos passaram' é:","Ninguém passou","Pelo menos uma pessoa não passou","Todos reprovaram","Alguns passaram",1,"Para negar que todos passaram, basta afirmar que pelo menos um não passou."],
+  ["Sequência","Sequências podem seguir padrões multiplicativos.","Compare cada termo com o anterior.","Qual o próximo número: 3, 6, 12, 24, ...?","30","36","42","48",3,"Cada termo é o dobro do anterior. O próximo é 48."]
+ ],
+ "Informática":[
+  ["Segurança digital","Senhas fortes e autenticação em dois fatores reduzem riscos.","Nunca compartilhe códigos recebidos por SMS ou aplicativo.","Qual atitude aumenta a segurança de uma conta?","Repetir a mesma senha em todos os sites","Compartilhar a senha com colegas","Ativar autenticação em dois fatores","Clicar em qualquer link recebido",2,"A autenticação em dois fatores adiciona uma camada de proteção."],
+  ["Internet","O navegador permite acessar páginas e serviços na internet.","Exemplos de navegadores incluem Chrome, Firefox e Edge.","Qual opção é um navegador?","Windows","Google Chrome","Excel","Linux",1,"Google Chrome é um navegador de internet."],
+  ["Planilhas","Planilhas organizam dados em linhas, colunas e células.","Fórmulas normalmente começam com o sinal de igual.","Qual símbolo inicia uma fórmula no Excel?","+","=","#","@",1,"No Excel, fórmulas começam com o sinal de igual."],
+  ["Arquivos","Extensões ajudam a identificar o formato dos arquivos.","PDF é usado para documentos com apresentação preservada.","Qual extensão identifica normalmente um arquivo PDF?"," .mp3",".pdf",".exe",".jpg",1,"A extensão .pdf identifica arquivos no formato PDF."]
  ],
  "Direito Constitucional":[
   ["Direitos fundamentais","A Constituição Federal prevê direitos e garantias fundamentais.","O artigo 5º reúne direitos individuais e coletivos.","Segundo a Constituição, todos são iguais perante:","A lei","O governo local","O empregador","O município",0,"O artigo 5º estabelece que todos são iguais perante a lei."],
@@ -227,386 +526,173 @@ const subjects = {
 };
 
 let data=JSON.parse(localStorage.getItem("concursoV4")||"null")||{
- points:0,answered:0,hits:0,attempts:{},wrong:[],done:{},
- daily:{date:"",count:0},history:[],tasks:{}
+ points:0,answered:0,hits:0,attempts:{},wrong:[],done:{},daily:{date:"",count:0},history:[],tasks:{}
 };
-
 let current=null,exam=[],examIndex=0,examHits=0,examAnswered=0;
-
-function save(){
- localStorage.setItem("concursoV4",JSON.stringify(data));
-}
-
+function save(){localStorage.setItem("concursoV4",JSON.stringify(data));}
 function allQuestions(){
  let arr=[];
- Object.entries(subjects).forEach(([subject,qs])=>
-  qs.forEach((q,i)=>arr.push({subject,id:subject+"-"+i,q}))
- );
+ Object.entries(subjects).forEach(([subject,qs])=>qs.forEach((q,i)=>arr.push({subject,id:subject+"-"+i,q})));
  return arr;
 }
-
 function showTab(id){
- document.querySelectorAll("section").forEach(s=>
-  s.classList.toggle("active",s.id===id)
- );
- document.querySelectorAll("nav button").forEach(b=>
-  b.classList.toggle("active",b.dataset.tab===id)
- );
+ document.querySelectorAll("section").forEach(s=>s.classList.toggle("active",s.id===id));
+ document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===id));
  if(id==="inicio")renderDashboard();
  if(id==="revisao")renderReview();
  if(id==="plano")renderPlan();
  if(id==="ranking")loadRanking();
 }
-
-document.querySelectorAll("nav button").forEach(b=>
- b.onclick=()=>showTab(b.dataset.tab)
-);
-
-function renderSubjects(){
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+ function renderSubjects(){
  let html="";
  Object.entries(subjects).forEach(([name,qs])=>{
   let correct=qs.filter((q,i)=>data.done[name+"-"+i]).length;
-  html+=`<div class="card subject">
-   <h3>${name}</h3>
-   <p class="muted">${qs.length} questões disponíveis</p>
-   <div class="progress"><span style="width:${correct/qs.length*100}%"></span></div>
-   <p class="small">${correct} de ${qs.length} questões acertadas</p>
-   <button onclick="startSubject('${name.replace(/'/g,"\\'")}')">Estudar esta disciplina →</button>
-  </div>`;
+  html+=`<div class="card subject"><h3>${name}</h3><p class="muted">${qs.length} questões disponíveis</p><div class="progress"><span style="width:${correct/qs.length*100}%"></span></div><p class="small">${correct} de ${qs.length} questões acertadas</p><button onclick="startSubject('${name.replace(/'/g,"\\'")}')">Estudar esta disciplina →</button></div>`;
  });
  document.getElementById("subjectList").innerHTML=html;
 }
-
 function startSubject(name){
- current={name,index:0,questions:subjects[name].map((q,i)=>({
-  subject:name,id:name+"-"+i,q
- }))};
- showTab("materias");
- renderQuestion();
+ current={name,index:0,questions:subjects[name].map((q,i)=>({subject:name,id:name+"-"+i,q}))};
+ showTab("materias");renderQuestion();
 }
-
 function renderQuestion(){
  let area=document.getElementById("lessonArea");
- if(!current||current.index>=current.questions.length){
-  area.innerHTML='<div class="card"><h3>Disciplina concluída!</h3><p>Você terminou esta sequência. Revise os erros ou escolha outra matéria.</p><button class="primary" onclick="renderSubjects()">Voltar às disciplinas</button></div>';
-  return;
- }
+ if(!current||current.index>=current.questions.length){area.innerHTML='<div class="card"><h3>Disciplina concluída!</h3><p>Você terminou esta sequência. Revise os erros ou escolha outra matéria.</p><button class="primary" onclick="renderSubjects()">Voltar às disciplinas</button></div>';return;}
  let item=current.questions[current.index],q=item.q;
- area.innerHTML=`<div class="card">
-  <span class="tag">${item.subject}</span>
-  <span class="tag">Questão ${current.index+1} de ${current.questions.length}</span>
-  <h3>${q[0]}</h3>
-  <p>${q[1]}</p>
-  <p><b>Exemplo / dica:</b> ${q[2]}</p>
-  <hr>
-  <p class="question">${q[3]}</p>
-  <div id="options">${q.slice(4,8).map((o,i)=>
-   `<button class="option" onclick="answer('${item.id}',${i},this)">${String.fromCharCode(65+i)}. ${o}</button>`
-  ).join("")}</div>
-  <div id="answerFeedback"></div>
-  <p class="muted small">A explicação será apresentada depois da resposta.</p>
- </div>`;
+ area.innerHTML=`<div class="card"><span class="tag">${item.subject}</span><span class="tag">Questão ${current.index+1} de ${current.questions.length}</span><h3>${q[0]}</h3><p>${q[1]}</p><p><b>Exemplo / dica:</b> ${q[2]}</p><hr><p class="question">${q[3]}</p><div id="options">${q.slice(4,8).map((o,i)=>`<button class="option" onclick="answer('${item.id}',${i},this)">${String.fromCharCode(65+i)}. ${o}</button>`).join("")}</div><div id="answerFeedback"></div><p class="muted small">A explicação será apresentada depois da resposta.</p></div>`;
 }
-
 function dailyAdd(){
  let today=new Date().toLocaleDateString("pt-BR");
  if(data.daily.date!==today)data.daily={date:today,count:0};
- data.daily.count++;
- save();
+ data.daily.count++;save();
 }
-
 function answer(id,choice,btn){
  let item=current.questions[current.index],q=item.q;
  if(data.attempts[id])return;
- data.attempts[id]=true;
- data.answered++;
- dailyAdd();
+ data.attempts[id]=true;data.answered++;dailyAdd();
  let correct=choice===q[8];
-
- if(correct){
-  data.hits++;
-  data.points+=10;
-  data.done[id]=true;
-  data.wrong=data.wrong.filter(x=>x!==id);
- }else if(!data.wrong.includes(id)){
-  data.wrong.push(id);
- }
-
- document.querySelectorAll("#options button").forEach((b,i)=>{
-  b.disabled=true;
-  if(i===q[8])b.classList.add("correct");
-  if(i===choice&&!correct)b.classList.add("wrong");
- });
-
- document.getElementById("answerFeedback").innerHTML=
-  `<div class="feedback ${correct?"good":"bad"}">
-   <b>${correct?"Muito bem! +10 pontos":"Vamos aprender com o erro."}</b>
-   <p>${q[9]}</p>
-   <button class="primary" onclick="nextQuestion()">Próxima questão</button>
-  </div>`;
-
- save();
- renderDashboard();
+ if(correct){data.hits++;data.points+=10;data.done[id]=true;data.wrong=data.wrong.filter(x=>x!==id);}
+ else if(!data.wrong.includes(id)){data.wrong.push(id);}
+ document.querySelectorAll("#options button").forEach((b,i)=>{b.disabled=true;if(i===q[8])b.classList.add("correct");if(i===choice&&!correct)b.classList.add("wrong");});
+ document.getElementById("answerFeedback").innerHTML=`<div class="feedback ${correct?"good":"bad"}"><b>${correct?"Muito bem! +10 pontos":"Vamos aprender com o erro."}</b><p>${q[9]}</p><button class="primary" onclick="nextQuestion()">Próxima questão</button></div>`;
+ save();renderDashboard();
 }
-
-function nextQuestion(){
- current.index++;
- renderQuestion();
-}
+function nextQuestion(){current.index++;renderQuestion();}
 
 function startExam(){
  let pool=allQuestions();
- for(let i=pool.length-1;i>0;i--){
-  let j=Math.floor(Math.random()*(i+1));
-  [pool[i],pool[j]]=[pool[j],pool[i]];
- }
+ for(let i=pool.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
  let count=Math.min(Number(document.getElementById("simCount").value),pool.length);
- exam=pool.slice(0,count);
- examIndex=0;
- examHits=0;
- examAnswered=0;
- showTab("simulado");
- renderExam();
+ exam=pool.slice(0,count);examIndex=0;examHits=0;examAnswered=0;
+ showTab("simulado");renderExam();
 }
-
 function renderExam(){
  let area=document.getElementById("examArea");
- if(examIndex>=exam.length){
-  finishExam();
-  return;
- }
+ if(examIndex>=exam.length){finishExam();return;}
  let item=exam[examIndex],q=item.q;
- area.innerHTML=`<div class="card">
-  <span class="tag">Questão ${examIndex+1} de ${exam.length}</span>
-  <span class="tag">${item.subject}</span>
-  <p class="question">${q[3]}</p>
-  ${q.slice(4,8).map((o,i)=>
-   `<button class="option" onclick="examAnswer(${i})">${String.fromCharCode(65+i)}. ${o}</button>`
-  ).join("")}
- </div>`;
+ area.innerHTML=`<div class="card"><span class="tag">Questão ${examIndex+1} de ${exam.length}</span><span class="tag">${item.subject}</span><p class="question">${q[3]}</p>${q.slice(4,8).map((o,i)=>`<button class="option" onclick="examAnswer(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join("")}</div>`;
 }
-
 function examAnswer(choice){
  let q=exam[examIndex].q;
  examAnswered++;
- if(choice===q[8]){
-  examHits++;
- }else if(!data.wrong.includes(exam[examIndex].id)){
-  data.wrong.push(exam[examIndex].id);
- }
- examIndex++;
- renderExam();
+ if(choice===q[8])examHits++;
+ else if(!data.wrong.includes(exam[examIndex].id))data.wrong.push(exam[examIndex].id);
+ examIndex++;renderExam();
 }
-
 function finishExam(){
  let percent=Math.round(examHits/exam.length*100);
- data.history.push({
-  date:new Date().toLocaleString("pt-BR"),
-  total:exam.length,
-  hits:examHits,
-  percent
- });
- data.points+=examHits*5;
- save();
-
- document.getElementById("examArea").innerHTML=
-  `<div class="card">
-   <h3>Resultado do simulado</h3>
-   <div class="stat">${percent}%</div>
-   <p>Você acertou ${examHits} de ${exam.length} questões.</p>
-   <p>${percent>=80?"Excelente desempenho! Continue revisando.":percent>=60?"Bom progresso. Reforce os assuntos em que errou.":"Não desanime. Use as explicações e tente novamente."}</p>
-   <button class="primary" onclick="startExam()">Fazer outro simulado</button>
-  </div>`;
-
+ data.history.push({date:new Date().toLocaleString("pt-BR"),total:exam.length,hits:examHits,percent});
+ data.points+=examHits*5;save();
+ document.getElementById("examArea").innerHTML=`<div class="card"><h3>Resultado do simulado</h3><div class="stat">${percent}%</div><p>Você acertou ${examHits} de ${exam.length} questões.</p><p>${percent>=80?"Excelente desempenho! Continue revisando.":percent>=60?"Bom progresso. Reforce os assuntos em que errou.":"Não desanime. Use as explicações e tente novamente."}</p><button class="primary" onclick="startExam()">Fazer outro simulado</button></div>`;
  renderDashboard();
 }
-
 function renderReview(){
  let area=document.getElementById("reviewArea");
  let items=data.wrong.map(id=>allQuestions().find(x=>x.id===id)).filter(Boolean);
-
- if(!items.length){
-  area.innerHTML='<div class="card">Parabéns! Não há questões pendentes de revisão.</div>';
-  return;
- }
-
- area.innerHTML=items.map(item=>
-  `<div class="card">
-   <span class="tag">${item.subject}</span>
-   <h3>${item.q[0]}</h3>
-   <p>${item.q[3]}</p>
-   <p><b>Resposta correta:</b> ${item.q[4+item.q[8]]}</p>
-   <p>${item.q[9]}</p>
-   <button class="primary" onclick="reviewQuestion('${item.id}')">Praticar novamente</button>
-  </div>`
- ).join("");
+ if(!items.length){area.innerHTML='<div class="card">Parabéns! Não há questões pendentes de revisão.</div>';return;}
+ area.innerHTML=items.map(item=>`<div class="card"><span class="tag">${item.subject}</span><h3>${item.q[0]}</h3><p>${item.q[3]}</p><p><b>Resposta correta:</b> ${item.q[4+item.q[8]]}</p><p>${item.q[9]}</p><button class="primary" onclick="reviewQuestion('${item.id}')">Praticar novamente</button></div>`).join("");
 }
-
 function reviewQuestion(id){
  let item=allQuestions().find(x=>x.id===id);
  current={name:item.subject,index:0,questions:[item]};
- delete data.attempts[id];
- save();
- showTab("materias");
- renderQuestion();
+ delete data.attempts[id];save();showTab("materias");renderQuestion();
 }
-
 function renderDashboard(){
- let accuracy=data.answered?
-  Math.round(data.hits/data.answered*100):0;
-
+ let accuracy=data.answered?Math.round(data.hits/data.answered*100):0;
  document.getElementById("points").textContent=data.points;
  document.getElementById("answered").textContent=data.answered;
  document.getElementById("hits").textContent=data.hits;
  document.getElementById("accuracy").textContent=accuracy+"%";
-
  let bar=data.answered?Math.min(100,accuracy):0;
  document.getElementById("overallBar").style.width=bar+"%";
- document.getElementById("overallText").textContent=
-  accuracy+"% de aproveitamento geral.";
-
+ document.getElementById("overallText").textContent=accuracy+"% de aproveitamento geral.";
  let today=new Date().toLocaleDateString("pt-BR");
  let count=data.daily.date===today?data.daily.count:0;
-
- document.getElementById("dailyBar").style.width=
-  Math.min(100,count*10)+"%";
- document.getElementById("dailyText").textContent=
-  count+" de 10 questões respondidas hoje.";
-
- let weakest=Object.entries(subjects).map(([name,qs])=>({
-  name,
-  score:qs.filter((q,i)=>data.done[name+"-"+i]).length/qs.length
- })).sort((a,b)=>a.score-b.score)[0];
-
- document.getElementById("recommendation").textContent=
-  data.answered?
-  `Continue estudando ${weakest.name}. É uma boa oportunidade para reforçar sua preparação.`:
-  "Comece escolhendo uma disciplina. Seu desempenho ajudará a indicar o que estudar.";
-
- document.getElementById("historyText").textContent=
-  data.history.length?
-  data.history.map(h=>`${h.date}: ${h.hits}/${h.total} acertos (${h.percent}%)`).join(" | "):
-  "Nenhum simulado realizado ainda.";
+ document.getElementById("dailyBar").style.width=Math.min(100,count*10)+"%";
+ document.getElementById("dailyText").textContent=count+" de 10 questões respondidas hoje.";
+ let weakest=Object.entries(subjects).map(([name,qs])=>({name,score:qs.filter((q,i)=>data.done[name+"-"+i]).length/qs.length})).sort((a,b)=>a.score-b.score)[0];
+ document.getElementById("recommendation").textContent=data.answered?`Continue estudando ${weakest.name}. É uma boa oportunidade para reforçar sua preparação.`:"Comece escolhendo uma disciplina. Seu desempenho ajudará a indicar o que estudar.";
+ document.getElementById("historyText").textContent=data.history.length?data.history.map(h=>`${h.date}: ${h.hits}/${h.total} acertos (${h.percent}%)`).join(" | "):"Nenhum simulado realizado ainda.";
 }
-
 function renderPlan(){
- let days=[
-  "Segunda: Português e interpretação",
-  "Terça: Matemática e porcentagem",
-  "Quarta: Informática e segurança digital",
-  "Quinta: Direito Constitucional",
-  "Sexta: Direito Administrativo",
-  "Sábado: Raciocínio Lógico e Ética",
-  "Domingo: Simulado e revisão"
- ];
-
- document.getElementById("weeklyPlan").innerHTML=
-  days.map(x=>`<div class="list-item">📘 ${x}</div>`).join("");
-
- let tasks=[
-  "Estudar uma aula",
-  "Responder 10 questões",
-  "Revisar uma questão errada",
-  "Ler um resumo ou anotação"
- ];
-
- document.getElementById("dailyTasks").innerHTML=
-  tasks.map((x,i)=>
-   `<div class="list-item">
-    <label><input type="checkbox" ${data.tasks[i]?"checked":""}
-    onchange="data.tasks[${i}]=this.checked;save()"> ${x}</label>
-   </div>`
-  ).join("");
+ let days=["Segunda: Português e interpretação","Terça: Matemática e porcentagem","Quarta: Informática e segurança digital","Quinta: Direito Constitucional","Sexta: Direito Administrativo","Sábado: Raciocínio Lógico e Ética","Domingo: Simulado e revisão"];
+ document.getElementById("weeklyPlan").innerHTML=days.map(x=>`<div class="list-item">📘 ${x}</div>`).join("");
+ let tasks=["Estudar uma aula","Responder 10 questões","Revisar uma questão errada","Ler um resumo ou anotação"];
+ document.getElementById("dailyTasks").innerHTML=tasks.map((x,i)=>`<div class="list-item"><label><input type="checkbox" ${data.tasks[i]?"checked":""} onchange="data.tasks[${i}]=this.checked;save()"> ${x}</label></div>`).join("");
 }
-
 function exportProgress(){
- let blob=new Blob([JSON.stringify(data,null,2)],{
-  type:"application/json"
- });
- let a=document.createElement("a");
- a.href=URL.createObjectURL(blob);
- a.download="meu-progresso-concurso.json";
- a.click();
- URL.revokeObjectURL(a.href);
+ let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+ let a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="meu-progresso-concurso.json";a.click();URL.revokeObjectURL(a.href);
 }
-
 function resetProgress(){
  if(!confirm("Tem certeza que deseja apagar seu progresso salvo neste navegador?"))return;
- localStorage.removeItem("concursoV4");
- location.reload();
+ localStorage.removeItem("concursoV4");location.reload();
 }
 
 async function loadRanking(){
- const list=document.getElementById("rankingList");
- const status=document.getElementById("rankingStatus");
- const count=document.getElementById("rankingCount");
- const updated=document.getElementById("rankingUpdated");
-
- if(!list||!status)return;
-
- status.textContent="Consultando o Supabase...";
- list.innerHTML='<p class="muted">Carregando...</p>';
-
- try{
-  const {data:rows,error}=await supabaseClient
-   .from("public_ranking_geral")
-   .select("participante,pontos,torneios_participados")
-   .order("pontos",{ascending:false})
-   .limit(100);
-
-  if(error)throw error;
-
-  const ranking=rows||[];
-  count.textContent=ranking.length;
-  updated.textContent=new Date().toLocaleTimeString("pt-BR",{
-   hour:"2-digit",minute:"2-digit"
-  });
-
-  if(!ranking.length){
-   list.innerHTML="<p>Nenhum participante aparece no ranking ainda. Assim que houver resultados registrados nos torneios, eles serão exibidos aqui.</p>";
-   status.textContent="Consulta concluída. Nenhum resultado cadastrado.";
-   return;
+  const list=document.getElementById("rankingList");
+  const status=document.getElementById("rankingStatus");
+  const count=document.getElementById("rankingCount");
+  const updated=document.getElementById("rankingUpdated");
+  if(!list||!status)return;
+  status.textContent="Consultando o Supabase...";
+  list.innerHTML='<p class="muted">Carregando...</p>';
+  try{
+    const {data:rows,error}=await supabaseClient
+      .from("public_ranking_geral")
+      .select("participante,pontos,torneios_participados")
+      .order("pontos",{ascending:false})
+      .limit(100);
+    if(error)throw error;
+    const ranking=rows||[];
+    count.textContent=ranking.length;
+    updated.textContent=new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+    if(!ranking.length){
+      list.innerHTML='<p>Nenhum participante aparece no ranking ainda. Assim que houver resultados registrados nos torneios, eles serão exibidos aqui.</p>';
+      status.textContent="Consulta concluída. Nenhum resultado cadastrado.";
+      return;
+    }
+    list.innerHTML='<div class="list-item" style="display:grid;grid-template-columns:55px 1fr 90px 110px;gap:8px;font-weight:bold"><span>Pos.</span><span>Participante</span><span>Pontos</span><span>Torneios</span></div>'+
+      ranking.map((r,i)=>`<div class="list-item" style="display:grid;grid-template-columns:55px 1fr 90px 110px;gap:8px;align-items:center"><strong>${i+1}º</strong><span>${escapeHTML(r.participante||"Participante")}</span><strong>${Number(r.pontos||0).toLocaleString("pt-BR")}</strong><span>${Number(r.torneios_participados||0)}</span></div>`).join("");
+    status.textContent="Ranking atualizado com sucesso.";
+  }catch(error){
+    console.error("Erro ao carregar ranking:",error);
+    count.textContent="—";
+    updated.textContent="—";
+    list.innerHTML='<p>Não foi possível carregar o ranking. Confira a conexão, o nome da view e as permissões de leitura no Supabase.</p>';
+    status.textContent="Falha na consulta: "+(error.message||"erro desconhecido");
   }
-
-  list.innerHTML=
-   '<div class="list-item" style="display:grid;grid-template-columns:55px 1fr 90px 110px;gap:8px;font-weight:bold"><span>Pos.</span><span>Participante</span><span>Pontos</span><span>Torneios</span></div>'+
-   ranking.map((r,i)=>
-    `<div class="list-item" style="display:grid;grid-template-columns:55px 1fr 90px 110px;gap:8px;align-items:center">
-     <strong>${i+1}º</strong>
-     <span>${escapeHTML(r.participante||"Participante")}</span>
-     <strong>${Number(r.pontos||0).toLocaleString("pt-BR")}</strong>
-     <span>${Number(r.torneios_participados||0)}</span>
-    </div>`
-   ).join("");
-
-  status.textContent="Ranking atualizado com sucesso.";
-
- }catch(error){
-  console.error("Erro ao carregar ranking:",error);
-  count.textContent="—";
-  updated.textContent="—";
-  list.innerHTML="<p>Não foi possível carregar o ranking. Confira a conexão, o nome da view e as permissões de leitura no Supabase.</p>";
-  status.textContent="Falha na consulta: "+(error.message||"erro desconhecido");
- }
 }
-
 function escapeHTML(value){
- return String(value).replace(/[&<>"']/g,ch=>({
-  "&":"&amp;",
-  "<":"&lt;",
-  ">":"&gt;",
-  '"':"&quot;",
-  "'":"&#39;"
- }[ch]));
+  return String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
 }
 
 function init(){
- renderSubjects();
- renderDashboard();
- renderPlan();
+ renderSubjects();renderDashboard();renderPlan();
 }
-
 init();
+initAuth();
 </script>
 </body>
 </html>
